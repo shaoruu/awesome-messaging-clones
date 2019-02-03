@@ -121,7 +121,10 @@ AUTH_USER_MODEL = 'users.User'
 
 # GraphQL Setup
 GRAPHENE = {
-    'SCHEMA': 'main_control.schema.schema'
+    'SCHEMA': 'main_control.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
 
 # Authentication

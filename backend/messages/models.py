@@ -1,10 +1,13 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from backend.utils import id_generator
 from backend.chatrooms.models import Chatroom
 
 
 class Message(models.Model):
+    unique_identifier = models.CharField(
+        max_length=8, default=id_generator, primary_key=True)
     message = models.CharField(max_length=1000)
 
     ' Relations with other models '

@@ -1,9 +1,12 @@
 from django.db import models
 from django.conf import settings
+from backend.utils import id_generator
 
 
 class Chatroom(models.Model):
-    name = models.CharField(primary_key=True, max_length=20)
+    unique_identifier = models.CharField(
+        max_length=8, default=id_generator, primary_key=True)
+    name = models.CharField(max_length=20, default="")
 
 
 class ChatroomMember(models.Model):
