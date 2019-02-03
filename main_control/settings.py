@@ -33,8 +33,12 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    # 'django.contrib.messages',
     'django.contrib.staticfiles',
+    'graphene_django',
+    'backend.chatrooms',
+    'backend.messages',
+    'backend.users'
 ]
 
 MIDDLEWARE = [
@@ -47,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'gb_messenger.urls'
+ROOT_URLCONF = 'main_control.urls'
 
 TEMPLATES = [
     {
@@ -65,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gb_messenger.wsgi.application'
+WSGI_APPLICATION = 'main_control.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -112,3 +116,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTH_USER_MODEL = 'users.User'
+
+# GraphQL Setup
+GRAPHENE = {
+    'SCHEMA': 'main_control.schema.schema'
+}
+
+# Authentication
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
