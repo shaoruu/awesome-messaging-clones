@@ -2,6 +2,7 @@ import graphene
 from graphene_django.filter import DjangoFilterConnectionField
 
 from .schemas.queries import UserFilter, UserNode
+from .schemas.mutations import Register, Login, Logout
 from .models import User as UserModel
 from graphql_jwt.decorators import login_required
 
@@ -17,5 +18,11 @@ class Query(graphene.ObjectType):
     def resolve_me(self, info):
         return info.context.user
 
-    def resolve_users(self, username):
+    def resolve_user(self, info, username):
         return UserModel.objects.get(username=username)
+
+
+class Mutation(graphene.ObjectType):
+    register = Register.Field()
+    login = Login.Field()
+    logout = Logout.Field()

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'backend.chatrooms',
+    'backend.chatroom_members',
     'backend.messages',
     'backend.users'
 ]

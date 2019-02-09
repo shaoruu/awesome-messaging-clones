@@ -20,7 +20,7 @@ class Message(models.Model):
     sent_at = models.DateTimeField(default=timezone.now)
     edited_at = models.DateTimeField(auto_now_add=True)
 
-    REQUIRED_FIELDS = ['message', 'sender', 'chatroom']
+    REQUIRED_FIELDS = ['message', 'user', 'chatroom']
 
     class Meta:
         ordering = ['sent_at']
