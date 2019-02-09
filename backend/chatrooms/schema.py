@@ -2,7 +2,7 @@ import graphene
 from graphene_django.filter import DjangoFilterConnectionField
 
 from .schemas.queries import ChatroomFilter, ChatroomNode
-from .schemas.mutations import CreateChatroom
+from .schemas.mutations import CreateChatroom, UpdateChatroom, DeleteChatroom
 from .models import Chatroom as ChatroomModel
 
 
@@ -18,3 +18,5 @@ class Query(graphene.ObjectType):
 
 class Mutation(graphene.ObjectType):
     create_chatroom = CreateChatroom.Field()
+    update_chatroom = UpdateChatroom.Field()
+    delete_chatroom = DeleteChatroom.Field()

@@ -2,7 +2,7 @@ import graphene
 from graphene_django.filter import DjangoFilterConnectionField
 
 from .schemas.queries import MessageFilter, MessageNode
-from .schemas.mutations import CreateMessage, UpdateMessage
+from .schemas.mutations import CreateMessage, UpdateMessage, DeleteMessage
 from .models import Message as MessageModel
 
 
@@ -19,3 +19,4 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     create_message = CreateMessage.Field()
     update_message = UpdateMessage.Field()
+    delete_message = DeleteMessage.Field()

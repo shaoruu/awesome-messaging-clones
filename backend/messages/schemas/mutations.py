@@ -42,12 +42,30 @@ class UpdateMessage(relay.ClientIDMutation):
     ' Fields '
     message = graphene.Field(MessageNode)
 
+    @login_required
     def mutate_and_get_payload(root, info, **input):
-        input = clean_input(input)
-
         message = MessageModel.objects.get(
-            unique_identifier=input.get('message_id'))
+            unique_identifier=input.pop('message_id'))
+
+        input = clean_input(input)
         message.message = input.get('message')
 
         message.save()
         return UpdateMessage(message=message)
+
+
+class DeleteMessage(relay.ClientIDMutation):
+    class Input:
+        message_id = graphene.String(
+            required=True, description="Unique identifier of the message")
+
+    ' Fields '
+    successful = graphene.Boolean()
+
+    @login_required
+    def mutate_and_get_payload(root, info, **input):
+        message = MessageModel.objects.get(
+            unique_identifier=input.get('message_id'))
+        message.delete()
+
+        return DeleteMessage(successful=True)

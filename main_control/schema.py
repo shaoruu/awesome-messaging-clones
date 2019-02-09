@@ -14,9 +14,10 @@ class Query(backend.chatrooms.schema.Query,
     pass
 
 
-class Mutation(backend.users.schema.Mutation,
-               backend.chatrooms.schema.Mutation,
+class Mutation(backend.chatrooms.schema.Mutation,
+               backend.chatroom_members.schema.Mutation,
                backend.messages.schema.Mutation,
+               backend.users.schema.Mutation,
                graphene.ObjectType):
     pass
 
