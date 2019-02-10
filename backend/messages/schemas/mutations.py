@@ -4,7 +4,7 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
-from backend.enums import MutationType
+from backend.enums import MutationTypes
 from backend.chatrooms.models import Chatroom as ChatroomModel
 from ..models import Message as MessageModel
 from .queries import MessageNode
@@ -35,7 +35,7 @@ class CreateMessage(relay.ClientIDMutation):
         MessageSubscriptions.broadcast(
             group='{}-message-subscription'.format(chatroom.unique_identifier),
             payload={
-                "type": MutationType.CREATE.name,
+                "type": MutationTypes.CREATE.name,
                 "message_id": new_message.unique_identifier
             }
         )
@@ -61,6 +61,16 @@ class UpdateMessage(relay.ClientIDMutation):
         message.message = input.get('message')
 
         message.save()
+
+        MessageSubscriptions.broadcast(
+            group='{}-message-subscription'.format(
+                message.chatroom.unique_identifier),
+            payload={
+                "type": MutationTypes.UPDATE.name,
+                "message_id": message.unique_identifier
+            }
+        )
+
         return UpdateMessage(message=message)
 
 
@@ -76,6 +86,16 @@ class DeleteMessage(relay.ClientIDMutation):
     def mutate_and_get_payload(root, info, **input):
         message = MessageModel.objects.get(
             unique_identifier=input.get('message_id'))
+
+        MessageSubscriptions.broadcast(
+            group='{}-message-subscription'.format(
+                message.chatroom.unique_identifier),
+            payload={
+                "type": MutationTypes.DELETE.name,
+                "message_id": input.get('message_id')
+            }
+        )
+
         message.delete()
 
         return DeleteMessage(successful=True)

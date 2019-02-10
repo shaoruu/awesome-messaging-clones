@@ -4,7 +4,7 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
-from backend.enums import MutationType
+from backend.enums import MutationTypes
 from backend.chatroom_members.models import ChatroomMember as ChatroomMemberModel
 from ..models import Chatroom as ChatroomModel
 from .queries import ChatroomNode
@@ -36,7 +36,7 @@ class CreateChatroom(relay.ClientIDMutation):
             group='{}-chatroom-subscription'.format(
                 info.context.user.username),
             payload={
-                "type": MutationType.CREATE.name,
+                "type": MutationTypes.CREATE.name,
                 "chatroom_id": new_chatroom.unique_identifier
             }
         )
@@ -62,6 +62,16 @@ class UpdateChatroom(relay.ClientIDMutation):
         chatroom.name = input.get('name')
 
         chatroom.save()
+
+        ChatroomSubscriptions.broadcast(
+            group='{}-chatroom-subscription'.format(
+                info.context.user.username),
+            payload={
+                "type": MutationTypes.UPDATE.name,
+                "chatroom_id": chatroom.unique_identifier
+            }
+        )
+
         return UpdateChatroom(chatroom=chatroom)
 
 
@@ -71,11 +81,21 @@ class DeleteChatroom(relay.ClientIDMutation):
             required=True, description="Unique identifier of the chatroom")
 
     ' Fields '
-    success = graphene.Boolean()
+    successful = graphene.Boolean()
 
     def mutate_and_get_payload(root, info, **input):
         chatroom = ChatroomModel.objects.get(
             unique_identifier=input.get('chatroom_id'))
+
+        ChatroomSubscriptions.broadcast(
+            group='{}-chatroom-subscription'.format(
+                info.context.user.username),
+            payload={
+                "type": MutationTypes.DELETE.name,
+                "chatroom_id": input.get('chatroom_id')
+            }
+        )
+
         chatroom.delete()
 
-        return DeleteChatroom(success=True)
+        return DeleteChatroom(successful=True)

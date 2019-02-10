@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
-from backend.enums import MutationType
+from backend.enums import SpecialMutationTypes
 from backend.users.models import User as UserModel
 from .queries import UserNode
 from .subscriptions import UserSubscriptions
@@ -36,9 +36,9 @@ class Register(relay.ClientIDMutation):
         new_user.save()
 
         UserSubscriptions.broadcast(
-            group='new_users-subscription',
+            group='users-subscription',
             payload={
-                "type": MutationType.CREATE.name,
+                "type": SpecialMutationTypes.REGISTER.name,
                 "username": username
             }
         )
@@ -65,6 +65,15 @@ class Login(relay.ClientIDMutation):
                 'Unable to authenticate user. Either the account is disabled or the entered credentials are wro    ng.')
 
         login(info.context, user)
+
+        UserSubscriptions.broadcast(
+            group='users-subscription',
+            payload={
+                "type": SpecialMutationTypes.LOGIN.name,
+                "username": info.context.user.username
+            }
+        )
+
         return Login(user=user)
 
 
@@ -75,6 +84,13 @@ class Logout(graphene.Mutation):
     @login_required
     def mutate(self, info):
         try:
+            UserSubscriptions.broadcast(
+                group='users-subscription',
+                payload={
+                    "type": SpecialMutationTypes.LOGOUT.name,
+                    "username": info.context.user.username
+                }
+            )
             logout(info.context)
         except:
             raise GraphQLError('Failed to logout')

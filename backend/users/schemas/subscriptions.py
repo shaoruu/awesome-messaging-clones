@@ -13,7 +13,7 @@ class UserSubscriptions(BaseSubscription):
 
     @staticmethod
     def subscribe(root, info):
-        return ['new_users-subscription']
+        return ['users-subscription']
 
     @staticmethod
     def publish(payload, info):
