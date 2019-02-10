@@ -3,7 +3,6 @@ import django_filters
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphql_jwt.utils import jwt_encode, jwt_payload
-from graphql_jwt.decorators import login_required
 from backend.users.models import User
 
 
@@ -23,7 +22,6 @@ class UserNode(DjangoObjectType):
         model = User
         interfaces = (relay.Node,)
 
-    @login_required
     def resolve_token(self, info):
         if info.context.user != self:
             return None

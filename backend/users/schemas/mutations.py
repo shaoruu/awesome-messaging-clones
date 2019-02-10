@@ -58,6 +58,7 @@ class Login(relay.ClientIDMutation):
 
     def mutate_and_get_payload(root, info, **input):
         input['username'] = input.get('username').strip()
+
         user = authenticate(**input)
 
         if user is None:
@@ -81,8 +82,9 @@ class Logout(graphene.Mutation):
     ' Fields '
     successful = graphene.Boolean()
 
-    @login_required
     def mutate(self, info):
+        if info.context.user.is_anonymous:
+            raise GraphQLError('Not logged in.')
         try:
             UserSubscriptions.broadcast(
                 group='users-subscription',
