@@ -23,7 +23,8 @@ class Mutation(backend.chatrooms.schema.Mutation,
     pass
 
 
-class Subscription(backend.messages.schema.Subscription,
+class Subscription(backend.chatrooms.schema.Subscription,
+                   backend.messages.schema.Subscription,
                    backend.users.schema.Subscription,
                    graphene.ObjectType):
     pass

@@ -3,7 +3,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 
 from .schemas.queries import MessageFilter, MessageNode
 from .schemas.mutations import CreateMessage, UpdateMessage, DeleteMessage
-from .schemas.subscriptions import NewMessageCreation
+from .schemas.subscriptions import MessageSubscriptions
 from .models import Message as MessageModel
 
 
@@ -24,4 +24,4 @@ class Mutation(graphene.ObjectType):
 
 
 class Subscription(graphene.ObjectType):
-    new_message_creation = NewMessageCreation.Field()
+    message_subscriptions = MessageSubscriptions.Field()

@@ -5,9 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
+from backend.enums import MutationType
 from backend.users.models import User as UserModel
 from .queries import UserNode
-from .subscriptions import NewUserRegistration
+from .subscriptions import UserSubscriptions
 
 
 class Register(relay.ClientIDMutation):
@@ -24,14 +25,22 @@ class Register(relay.ClientIDMutation):
         password = input.pop('password')
         cleaned_input = clean_input(input)
         cleaned_input['username'] = cleaned_input.get('username').lower()
+        username = cleaned_input.get('username')
 
-        new_user = UserModel(username=cleaned_input['username'])
+        # check if username exists
+        if UserModel.objects.filter(username=username).exists():
+            raise GraphQLError('Username Taken.')
+
+        new_user = UserModel(username=username)
         new_user.set_password(password)
         new_user.save()
 
-        NewUserRegistration.broadcast(
+        UserSubscriptions.broadcast(
             group='new_users-subscription',
-            payload=cleaned_input['username']
+            payload={
+                "type": MutationType.CREATE.name,
+                "username": username
+            }
         )
 
         return Register(user=new_user)

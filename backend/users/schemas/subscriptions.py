@@ -5,9 +5,10 @@ from ..models import User as UserModel
 from backend.graphql_ws import BaseSubscription
 
 
-class NewUserRegistration(BaseSubscription):
+class UserSubscriptions(BaseSubscription):
 
     ' Fields '
+    mutation_type = graphene.String()
     user = graphene.Field(UserNode)
 
     @staticmethod
@@ -15,7 +16,10 @@ class NewUserRegistration(BaseSubscription):
         return ['new_users-subscription']
 
     @staticmethod
-    def publish(username, info):
+    def publish(payload, info):
+        username = payload.get('username')
+
+        mutation_type = payload.get('type')
         user = UserModel.objects.get(username=username)
 
-        return NewUserRegistration(user=user)
+        return UserSubscriptions(mutation_type=mutation_type, user=user)

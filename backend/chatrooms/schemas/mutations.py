@@ -4,9 +4,11 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
+from backend.enums import MutationType
 from backend.chatroom_members.models import ChatroomMember as ChatroomMemberModel
 from ..models import Chatroom as ChatroomModel
 from .queries import ChatroomNode
+from .subscriptions import ChatroomSubscriptions
 
 
 class CreateChatroom(relay.ClientIDMutation):
@@ -29,6 +31,15 @@ class CreateChatroom(relay.ClientIDMutation):
         chatroom_member = ChatroomMemberModel(
             chatroom=new_chatroom, user=info.context.user)
         chatroom_member.save()
+
+        ChatroomSubscriptions.broadcast(
+            group='{}-chatroom-subscription'.format(
+                info.context.user.username),
+            payload={
+                "type": MutationType.CREATE.name,
+                "chatroom_id": new_chatroom.unique_identifier
+            }
+        )
 
         return CreateChatroom(chatroom=new_chatroom)
 
