@@ -1,4 +1,5 @@
 import graphene
+from rx import Observable
 
 import backend.chatrooms.schema
 import backend.messages.schema
@@ -22,4 +23,10 @@ class Mutation(backend.chatrooms.schema.Mutation,
     pass
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+class Subscription(backend.users.schema.Subscription,
+                   graphene.ObjectType):
+    pass
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation,
+                         subscription=Subscription)

@@ -6,14 +6,18 @@ name = "pypi"
 [packages]
 graphene = "*"
 django = "*"
-graphql-ws = "*"
 channels = "*"
 django-filter = "*"
 django-pipeline = "*"
 django-cors-headers = "*"
 django-graphql-jwt = "*"
+channels-redis = "*"
+rx = "*"
+namedlist = "*"
+django-graphql-playground = "*"
 
 [dev-packages]
+autopep8 = "*"
 
 [requires]
 python_version = "3.6"

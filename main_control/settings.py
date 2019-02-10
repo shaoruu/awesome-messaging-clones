@@ -24,7 +24,7 @@ SECRET_KEY = 'p7gv18_swa+&)p11tsji@^kiikgy1j*&-hv_%idj)aesp2t$wl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pipeline',
     'corsheaders',
+    'channels',
+    'graphql_playground',
     'graphene_django',
     'backend.chatrooms',
     'backend.chatroom_members',
@@ -73,7 +75,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'main_control.wsgi.application'
+# WSGI_APPLICATION = 'main_control.wsgi.application'
+ASGI_APPLICATION = "main_control.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -128,7 +131,7 @@ GRAPHENE = {
     'SCHEMA': 'main_control.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
+    ]
 }
 
 # Authentication
@@ -141,4 +144,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 PIPELINE = {
     'PIPELINE_ENABLED': True,
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }

@@ -1,5 +1,4 @@
 """backend URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
 Examples:
@@ -17,8 +16,11 @@ from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import path
 from graphene_django.views import GraphQLView
+from graphql_playground.views import GraphQLPlaygroundView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('playground/', GraphQLPlaygroundView.as_view(endpoint="http://localhost:8000/graphql/",
+                                                      subscription_endpoint="ws://localhost:8000/subscriptions/"))
 ]
