@@ -3,7 +3,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 
 from .schemas.queries import UserFilter, UserNode
 from .schemas.mutations import Register, Login, Logout
-from .schemas.subscriptions import NewUserSubscription
+from .schemas.subscriptions import NewUserRegistration
 from .models import User as UserModel
 from graphql_jwt.decorators import login_required
 
@@ -30,4 +30,4 @@ class Mutation(graphene.ObjectType):
 
 
 class Subscription(graphene.ObjectType):
-    new_user_subscription = NewUserSubscription.Field()
+    new_user_registration = NewUserRegistration.Field()

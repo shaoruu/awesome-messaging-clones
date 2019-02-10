@@ -7,6 +7,7 @@ from backend.utils import clean_input
 from backend.chatrooms.models import Chatroom as ChatroomModel
 from ..models import Message as MessageModel
 from .queries import MessageNode
+from .subscriptions import NewMessageCreation
 
 
 class CreateMessage(relay.ClientIDMutation):
@@ -29,6 +30,11 @@ class CreateMessage(relay.ClientIDMutation):
         new_message = MessageModel(message=input.get(
             'message'), user=sent_user, chatroom=chatroom)
         new_message.save()
+
+        NewMessageCreation.broadcast(
+            group='{}-subscription'.format(chatroom.unique_identifier),
+            payload=new_message.unique_identifier
+        )
 
         return CreateMessage(message=new_message)
 

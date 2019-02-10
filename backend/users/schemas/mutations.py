@@ -7,7 +7,7 @@ from graphql_jwt.decorators import login_required
 from backend.utils import clean_input
 from backend.users.models import User as UserModel
 from .queries import UserNode
-from .subscriptions import NewUserSubscription
+from .subscriptions import NewUserRegistration
 
 
 class Register(relay.ClientIDMutation):
@@ -29,8 +29,8 @@ class Register(relay.ClientIDMutation):
         new_user.set_password(password)
         new_user.save()
 
-        NewUserSubscription.broadcast(
-            group='new_users',
+        NewUserRegistration.broadcast(
+            group='new_users-subscription',
             payload=cleaned_input['username']
         )
 

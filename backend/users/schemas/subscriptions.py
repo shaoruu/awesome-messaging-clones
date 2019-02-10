@@ -5,17 +5,17 @@ from ..models import User as UserModel
 from backend.graphql_ws import BaseSubscription
 
 
-class NewUserSubscription(BaseSubscription):
+class NewUserRegistration(BaseSubscription):
 
     ' Fields '
     user = graphene.Field(UserNode)
 
     @staticmethod
     def subscribe(root, info):
-        return ['new_users']
+        return ['new_users-subscription']
 
     @staticmethod
     def publish(username, info):
         user = UserModel.objects.get(username=username)
 
-        return NewUserSubscription(user=user)
+        return NewUserRegistration(user=user)
