@@ -1,1 +1,1 @@
-# gb-messenger [NOT DONE]
+# awesome-messenger-clone (NOT DONE)
