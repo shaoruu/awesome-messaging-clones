@@ -1,8 +1,9 @@
 import graphene
 from graphene_django.filter import DjangoFilterConnectionField
+import graphql_jwt
 
 from .schemas.queries import UserFilter, UserNode
-from .schemas.mutations import Register, Login, Logout
+from .schemas.mutations import Register, Login
 from .schemas.subscriptions import UserSubscriptions
 from .models import User as UserModel
 from graphql_jwt.decorators import login_required
@@ -26,7 +27,12 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     register = Register.Field()
     login = Login.Field()
-    logout = Logout.Field()
+    token_auth = graphql_jwt.relay.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.relay.Verify.Field()
+    refresh_token = graphql_jwt.relay.Refresh.Field()
+
+    # Long running refresh tokens
+    revoke_token = graphql_jwt.relay.Revoke.Field()
 
 
 class Subscription(graphene.ObjectType):

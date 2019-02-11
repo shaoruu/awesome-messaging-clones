@@ -5,7 +5,7 @@ import redirect from '../lib/redirect'
 
 const LOGIN = gql`
 	mutation Login($username: String!, $password: String!) {
-		tokenAuth(input: { username: $username, password: $password }) {
+		login(input: { username: $username, password: $password }) {
 			token
 		}
 	}
@@ -20,7 +20,7 @@ const SigninBox = ({ client }) => {
 			mutation={LOGIN}
 			onCompleted={data => {
 				// Store the token in cookie
-				document.cookie = cookie.serialize('token', data.tokenAuth.token, {
+				document.cookie = cookie.serialize('token', data.login.token, {
 					maxAge: 5 * 7 * 24 * 60 * 60 // 5 weeks
 				})
 				// Force a reload of all the current queries now that the user is

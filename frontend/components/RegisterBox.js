@@ -10,7 +10,7 @@ const REGISTER = gql`
 				id
 			}
 		}
-		tokenAuth(input: { username: $username, password: $password }) {
+		login(input: { username: $username, password: $password }) {
 			token
 		}
 	}
@@ -24,7 +24,7 @@ const RegisterBox = ({ client }) => {
 			mutation={REGISTER}
 			onCompleted={data => {
 				// Store the token in cookie
-				document.cookie = cookie.serialize('token', data.tokenAuth.token, {
+				document.cookie = cookie.serialize('token', data.login.token, {
 					maxAge: 30 * 24 * 60 * 60 // 30 days
 				})
 				// Force a reload of all the current queries now that the user is

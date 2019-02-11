@@ -1,5 +1,6 @@
 import graphene
 from graphene import relay
+import graphql_jwt
 from graphql import GraphQLError
 from django.contrib.auth import authenticate, login, logout
 from graphql_jwt.decorators import login_required
@@ -46,26 +47,9 @@ class Register(relay.ClientIDMutation):
         return Register(user=new_user)
 
 
-class Login(relay.ClientIDMutation):
-    class Input:
-        username = graphene.String(
-            required=True, description="User's username")
-        password = graphene.String(
-            required=True, description="User's password")
+class Login(graphql_jwt.relay.JSONWebTokenMutation):
 
-    ' Fields '
-    user = graphene.Field(UserNode)
-
-    def mutate_and_get_payload(root, info, **input):
-        input['username'] = input.get('username').strip()
-
-        user = authenticate(**input)
-
-        if user is None:
-            raise GraphQLError(
-                'Unable to authenticate user. Either the account is disabled or the entered credentials are wro    ng.')
-
-        login(info.context, user)
+    def resolve(self, info):
 
         UserSubscriptions.broadcast(
             group='users-subscription',
@@ -75,25 +59,26 @@ class Login(relay.ClientIDMutation):
             }
         )
 
-        return Login(user=user)
+        return Login()
 
 
-class Logout(graphene.Mutation):
-    ' Fields '
-    successful = graphene.Boolean()
+# No need for logout.
+# class Logout(graphene.Mutation):
+#     ' Fields '
+#     successful = graphene.Boolean()
 
-    def mutate(self, info):
-        if info.context.user.is_anonymous:
-            raise GraphQLError('Not logged in.')
-        try:
-            UserSubscriptions.broadcast(
-                group='users-subscription',
-                payload={
-                    "type": SpecialMutationTypes.LOGOUT.name,
-                    "username": info.context.user.username
-                }
-            )
-            logout(info.context)
-        except:
-            raise GraphQLError('Failed to logout')
-        return Logout(successful=True)
+#     def mutate(self, info):
+#         if info.context.user.is_anonymous:
+#             raise GraphQLError('Not logged in.')
+#         try:
+#             UserSubscriptions.broadcast(
+#                 group='users-subscription',
+#                 payload={
+#                     "type": SpecialMutationTypes.LOGOUT.name,
+#                     "username": info.context.user.username
+#                 }
+#             )
+#             logout(info.context)
+#         except:
+#             raise GraphQLError('Failed to logout')
+#         return Logout(successful=True)

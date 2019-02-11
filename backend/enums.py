@@ -10,4 +10,3 @@ class MutationTypes(Enum):
 class SpecialMutationTypes(Enum):
     REGISTER = 'REGISTER'
     LOGIN = 'LOGIN'
-    LOGOUT = 'LOGOUT'
