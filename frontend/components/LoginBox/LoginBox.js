@@ -11,6 +11,7 @@ import {
 
 import { redirect, setCookie } from '../../lib/utils'
 import { LOGIN_MUTATION, LOGIN_SCHEMA } from '../../lib/graphql'
+import { Logo } from '..'
 
 class LoginBox extends Component {
 	render() {
@@ -54,13 +55,12 @@ class LoginBox extends Component {
 								isSubmitting
 							}) => (
 								<form onSubmit={handleSubmit} className={classes.form}>
-									<div className={classes.loginBoxTitle}>
-										Awesome Messenger
-									</div>
-									<div className={classes.loginBoxDescription}>
+									<Logo className={classes.logo} />
+									<div className={classes.title}>Awesome Messenger</div>
+									<div className={classes.description}>
 										Sign in with your account to get started.
 									</div>
-									<div className={classes.loginBoxInputFieldContainer}>
+									<div className={classes.inputFieldContainer}>
 										<FormControl aria-describedby="error-text">
 											<TextField
 												required
@@ -71,7 +71,7 @@ class LoginBox extends Component {
 												onChange={handleChange}
 												onBlur={handleBlur}
 												placeholder="Username"
-												className={classes.loginBoxTextfield}
+												className={classes.textField}
 												variant="outlined"
 											/>
 											{(touched.username &&
@@ -104,7 +104,7 @@ class LoginBox extends Component {
 												onChange={handleChange}
 												onBlur={handleBlur}
 												placeholder="Password"
-												className={classes.loginBoxTextfield}
+												className={classes.textField}
 												variant="outlined"
 											/>
 											{touched.password &&
@@ -116,11 +116,10 @@ class LoginBox extends Component {
 												)}
 										</FormControl>
 									</div>
-									<div className={classes.loginBoxButtons}>
+									<div className={classes.buttonWrapper}>
 										<Button
 											type="submit"
 											variant="text"
-											className={classes.loginButton}
 											disabled={
 												isSubmitting ||
 												!!(errors.username && touched.username) ||
@@ -141,28 +140,18 @@ class LoginBox extends Component {
 
 const styles = theme => ({
 	root: {},
-	loginButton: {
-		color: theme.palette.getContrastText('#009f9d'),
-		backgroundColor: '#009f9d',
-		'&:hover': {
-			backgroundColor: '#3fbac2'
-		},
-		'&:active': {
-			backgroundColor: '#3fbac2'
+	form: {},
+	logo: {
+		'&>img': {
+			maxWidth: '2em',
+			maxHeight: '2em'
 		}
 	},
-	cssFocused: {},
-	cssOutlinedInput: {
-		'&$cssFocused $notchedOutline': {
-			borderColor: '#00adb5'
-		}
-	},
-	cssLabel: {
-		'&$cssFocused': {
-			color: '#00adb5'
-		}
-	},
-	notchedOutline: {}
+	title: {},
+	description: {},
+	inputFieldContainer: {},
+	textField: {},
+	buttonWrapper: {}
 })
 
 export default withApollo(withStyles(styles)(LoginBox))
