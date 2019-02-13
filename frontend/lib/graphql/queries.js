@@ -22,8 +22,19 @@ export const USER_QUERY = gql`
 `
 
 export const USERS_QUERY = gql`
-	query Users($username_Icontains: String, $username_Istartswith: String) {
+	query Users(
+		$before: String
+		$after: String
+		$first: Int
+		$last: Int
+		$username_Icontains: String
+		$username_Istartswith: String
+	) {
 		users(
+			before: $before
+			after: $after
+			first: $first
+			last: $last
 			username_Icontains: $username_Icontains
 			username_Istartswith: $username_Istartswith
 		) {
@@ -51,6 +62,11 @@ export const MESSAGE_QUERY = gql`
 
 export const MESSAGES_QUERY = gql`
 	query Messages(
+		$before: String
+		$after: String
+		$first: Int
+		$last: Int
+		$message_Icontains: String
 		$user_Username: String
 		$user_Username_Icontains: String
 		$username_Username_Istartswith: String
@@ -59,6 +75,11 @@ export const MESSAGES_QUERY = gql`
 		$chatroom_Name_Istartswith: String
 	) {
 		messages(
+			before: $before
+			after: $after
+			first: $first
+			last: $last
+			message_Icontains: $message_Icontains
 			user_Username: $user_Username
 			user_Username_Icontains: $user_Username_Icontains
 			username_Username_Istartswith: $username_Username_Istartswith
@@ -86,8 +107,20 @@ export const CHATROOM_QUERY = gql`
 `
 
 export const CHATROOMS_QUERY = gql`
-	query Chatrooms($name: String, $name_Icontains: String, $name_Istartswith: String) {
+	query Chatrooms(
+		$before: String
+		$after: String
+		$first: Int
+		$last: Int
+		$name: String
+		$name_Icontains: String
+		$name_Istartswith: String
+	) {
 		chatrooms(
+			before: $before
+			after: $after
+			first: $first
+			last: $last
 			name: $name
 			name_Icontains: $name_Icontains
 			name_Istartswith: $name_Istartswith
