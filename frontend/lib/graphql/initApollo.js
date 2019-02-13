@@ -1,11 +1,12 @@
 import fetch from 'isomorphic-unfetch'
-import { createHttpLink } from 'apollo-link-http'
-import { GQL_BACKEND_URI, GQL_WS_URI } from '../../config/config'
+import { ApolloClient, InMemoryCache } from 'apollo-boost'
 import { WebSocketLink } from 'apollo-link-ws'
-import { split } from 'apollo-link'
+import { createHttpLink } from 'apollo-link-http'
 import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
-import { ApolloClient, InMemoryCache } from 'apollo-boost'
+import { split } from 'apollo-link'
+
+import { GQL_BACKEND_URI, GQL_WS_URI } from '../../config/config'
 
 let apolloClient = null
 
