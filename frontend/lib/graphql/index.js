@@ -1,4 +1,12 @@
-export { ME_QUERY } from './queries'
+export {
+	ME_QUERY,
+	USER_QUERY,
+	USERS_QUERY,
+	MESSAGE_QUERY,
+	MESSAGES_QUERY,
+	CHATROOM_QUERY,
+	CHATROOMS_QUERY
+} from './queries'
 
 export {
 	LOGIN_MUTATION,
