@@ -1,3 +1,5 @@
+export { default as withApollo } from './withApollo'
+
 export {
 	ME_QUERY,
 	USER_QUERY,
@@ -16,7 +18,8 @@ export {
 	UPDATE_MESSAGE_MUTATION,
 	UPDATE_CHATROOM_MUTATION,
 	DELETE_MESSAGE_MUTATION,
-	DELETE_CHATROOM_MUTATION
+	DELETE_CHATROOM_MUTATION,
+	LOGIN_SCHEMA
 } from './mutations'
 
 export {

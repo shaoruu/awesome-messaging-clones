@@ -1,9 +1,9 @@
-import { GET_ME_QUERY } from '../graphql'
+import { ME_QUERY } from '../graphql'
 
 export default apolloClient =>
 	apolloClient
 		.query({
-			query: GET_ME_QUERY
+			query: ME_QUERY
 		})
 		.then(({ data }) => {
 			return data

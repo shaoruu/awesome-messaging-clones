@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import * as Yup from 'yup'
 
 export const LOGIN_MUTATION = gql`
 	mutation Login($username: String!, $password: String!) {
@@ -80,3 +81,11 @@ export const DELETE_CHATROOM_MUTATION = gql`
 		}
 	}
 `
+
+/**
+ * Validation Schemas
+ */
+export const LOGIN_SCHEMA = Yup.object().shape({
+	username: Yup.string().required('Username is required.'),
+	password: Yup.string().required('Password is required.')
+})
