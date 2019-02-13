@@ -1,32 +1,17 @@
 import { Mutation, withApollo } from 'react-apollo'
-import gql from 'graphql-tag'
-import cookie from 'cookie'
-import redirect from '../lib/redirect'
 
-const REGISTER = gql`
-	mutation Register($username: String!, $password: String!) {
-		register(input: { username: $username, password: $password }) {
-			user {
-				id
-			}
-		}
-		login(input: { username: $username, password: $password }) {
-			token
-		}
-	}
-`
+import { redirect } from '../lib/utils'
+import { REGISTER_AND_LOGIN_MUTATION } from '../lib/graphql'
+import { setCookie } from '../lib/utils'
 
 const RegisterBox = ({ client }) => {
 	let username, password
 
 	return (
 		<Mutation
-			mutation={REGISTER}
+			mutation={REGISTER_AND_LOGIN_MUTATION}
 			onCompleted={data => {
-				// Store the token in cookie
-				document.cookie = cookie.serialize('token', data.login.token, {
-					maxAge: 30 * 24 * 60 * 60 // 30 days
-				})
+				setCookie(data.login.token)
 				// Force a reload of all the current queries now that the user is
 				// logged in
 				client.cache.reset().then(() => {

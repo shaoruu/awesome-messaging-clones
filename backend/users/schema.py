@@ -1,12 +1,12 @@
 import graphene
 from graphene_django.filter import DjangoFilterConnectionField
 import graphql_jwt
+from graphql_jwt.decorators import login_required
 
 from .schemas.queries import UserFilter, UserNode
 from .schemas.mutations import Register, Login
 from .schemas.subscriptions import UserSubscriptions
 from .models import User as UserModel
-from graphql_jwt.decorators import login_required
 
 
 class Query(graphene.ObjectType):

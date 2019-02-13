@@ -2,8 +2,7 @@ import React from 'react'
 import cookie from 'cookie'
 import { ApolloConsumer } from 'react-apollo'
 
-import redirect from '../lib/redirect'
-import checkLoggedIn from '../lib/checkLoggedIn'
+import { redirect, checkLoggedIn } from '../lib/utils'
 
 export default class Index extends React.Component {
 	static async getInitialProps(context, apolloClient) {

@@ -1,8 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-import redirect from '../lib/redirect'
-import checkLoggedIn from '../lib/checkLoggedIn'
+import { redirect, checkLoggedIn } from '../lib/utils'
 
 import SigninBox from '../components/SigninBox'
 

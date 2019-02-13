@@ -1,15 +1,8 @@
 import { Mutation, withApollo } from 'react-apollo'
-import gql from 'graphql-tag'
-import cookie from 'cookie'
-import redirect from '../lib/redirect'
 
-const LOGIN = gql`
-	mutation Login($username: String!, $password: String!) {
-		login(input: { username: $username, password: $password }) {
-			token
-		}
-	}
-`
+import { setCookie } from '../lib/utils'
+import { LOGIN_MUTATION } from '../lib/graphql'
+import { redirect } from '../lib/utils'
 
 // TODO: Find a better name for component.
 const SigninBox = ({ client }) => {
@@ -17,12 +10,10 @@ const SigninBox = ({ client }) => {
 
 	return (
 		<Mutation
-			mutation={LOGIN}
+			mutation={LOGIN_MUTATION}
 			onCompleted={data => {
-				// Store the token in cookie
-				document.cookie = cookie.serialize('token', data.login.token, {
-					maxAge: 5 * 7 * 24 * 60 * 60 // 5 weeks
-				})
+				setCookie(data.login.token)
+
 				// Force a reload of all the current queries now that the user is
 				// logged in
 				client.cache.reset().then(() => {
