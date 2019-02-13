@@ -8,7 +8,7 @@ class MainDocument extends Document {
 		const { pageContext } = this.props
 
 		return (
-			<html lang="en" dir="ltr">
+			<html lang="en" dir="ltr" style={{ height: '100%' }}>
 				<Head>
 					<meta charSet="utf-8" />
 					{/* Use minimum-scale=1 to enable GPU rasterization */}
@@ -16,6 +16,12 @@ class MainDocument extends Document {
 						name="viewport"
 						content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
 					/>
+					<style>
+						{`
+                            * { margin: 0; padding: 0; box-sizing: border-box }
+                            #__next { height: 100% }
+                        `}
+					</style>
 					<link
 						rel="stylesheet"
 						href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
@@ -24,8 +30,17 @@ class MainDocument extends Document {
 						href="https://fonts.googleapis.com/css?family=Bitter"
 						rel="stylesheet"
 					/>
+					<link
+						rel="icon"
+						href="https://static.xx.fbcdn.net/rsrc.php/y7/r/O6n_HQxozp9.ico"
+					/>
 				</Head>
-				<body>
+				<body
+					style={{
+						height: '100%',
+						fontFamily:
+							'Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;'
+					}}>
 					<Main />
 					<NextScript />
 				</body>
