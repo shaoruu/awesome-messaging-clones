@@ -1,1 +1,1 @@
-# awesome-messenger-clone (NOT DONE)
+# awesome-messaging-clones (NOT DONE)
