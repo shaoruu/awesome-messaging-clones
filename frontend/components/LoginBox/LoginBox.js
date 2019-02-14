@@ -6,7 +6,9 @@ import {
 	FormControl,
 	FormHelperText,
 	Button,
-	withStyles
+	withStyles,
+	Checkbox,
+	FormControlLabel
 } from '@material-ui/core'
 
 import { redirect, setCookie } from '../../lib/utils'
@@ -14,6 +16,17 @@ import { LOGIN_MUTATION, LOGIN_SCHEMA } from '../../lib/graphql'
 import { Logo } from '..'
 
 class LoginBox extends Component {
+	state = {
+		keepMeLoggedIn: false
+	}
+
+	handleChecked = () => {
+		this.setState(prevState => {
+			prevState.keepMeLoggedIn = !prevState.keepMeLoggedIn
+			return prevState
+		})
+	}
+
 	render() {
 		const { classes, client } = this.props
 
@@ -22,7 +35,7 @@ class LoginBox extends Component {
 				<Mutation
 					mutation={LOGIN_MUTATION}
 					onCompleted={data => {
-						setCookie(data.login.token)
+						if (this.state.keepMeLoggedIn) setCookie(data.login.token)
 
 						// Force a reload of all current queries now that user is
 						// logged in
@@ -33,7 +46,7 @@ class LoginBox extends Component {
 					onError={error => console.log(error)}>
 					{(login, { error, data }) => (
 						<Formik
-							initialValues={{ username: '', password: '' }}
+							initialValues={{ username: '', password: '', checked: false }}
 							validationSchema={LOGIN_SCHEMA}
 							onSubmit={(values, { setSubmitting }) => {
 								login({
@@ -61,11 +74,11 @@ class LoginBox extends Component {
 										Instantly connect with people in your life.
 									</h2>
 									<h2 className={classes.description}>
-										Sign in with your account to get started.
+										Sign in to get started.
 									</h2>
 									<div className={classes.inputFieldContainer}>
 										<FormControl aria-describedby="error-text">
-											<TextField
+											<input
 												required
 												id="username"
 												name="username"
@@ -91,17 +104,14 @@ class LoginBox extends Component {
 													) && (
 														<FormHelperText
 															id="error-text"
-															error
-															style={{
-																position: 'absolute'
-															}}>
+															error>
 															Invalid username or password.
 														</FormHelperText>
 													))}
 										</FormControl>
 										<FormControl aria-describedby="error-text">
-											<TextField
-												required
+											<input
+												// required
 												id="password"
 												name="password"
 												value={values.password}
@@ -117,28 +127,36 @@ class LoginBox extends Component {
 											{touched.password &&
 												errors &&
 												errors.password && (
-													<FormHelperText
-														id="error-text"
-														error
-														style={{
-															position: 'absolute'
-														}}>
-														>{errors.password}
+													<FormHelperText id="error-text" error>
+														{errors.password}
 													</FormHelperText>
 												)}
 										</FormControl>
 									</div>
 									<div className={classes.buttonWrapper}>
-										<Button
+										<button
 											type="submit"
-											variant="text"
 											disabled={
 												isSubmitting ||
 												!!(errors.username && touched.username) ||
 												!!(errors.password && touched.password)
-											}>
+											}
+											className={classes.continueButton}>
 											Continue
-										</Button>
+										</button>
+									</div>
+									<div className={classes.keepMeLoggedInWrapper}>
+										<FormControlLabel
+											control={
+												<Checkbox
+													checked={this.state.keepMeLoggedIn}
+													onChange={this.handleChecked}
+													disableRipple
+													color="primary"
+												/>
+											}
+											label={<h1>Keep me signed in</h1>}
+										/>
 									</div>
 								</form>
 							)}
@@ -157,7 +175,7 @@ const styles = theme => ({
 	form: {
 		display: 'flex',
 		width: 600,
-		height: '100%',
+		height: '120%',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -175,7 +193,7 @@ const styles = theme => ({
 	},
 	title: {
 		color: 'rgba(0, 0, 0, 1)',
-		fontSize: 50,
+		fontSize: 60,
 		fontWeight: '300',
 		marginBottom: 24,
 		textAlign: 'center'
@@ -193,18 +211,44 @@ const styles = theme => ({
 		width: '100%',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		position: 'relative'
 	},
 	textField: {
 		width: 450,
+		height: 60,
+		padding: 25,
+		fontSize: 24,
+		border: 'rgba(0, 0, 0, 0.2) 1.5px solid',
+		borderRadius: 5,
 		marginTop: 10,
 		'&:last-child': {
 			marginBottom: 20
+		},
+		'&::placeholder': {
+			fontWeight: 300,
+			color: 'rgba(0, 0, 0, 0.4)'
 		}
 	},
-	buttonWrapper: {
-		'& button': {
-			fontSize: 30
+	buttonWrapper: {},
+	continueButton: {
+		background: 'transparent',
+		border: 'none',
+		cursor: 'pointer',
+		fontSize: 32,
+		marginTop: 24,
+		color: '#0084ff'
+	},
+	keepMeLoggedInWrapper: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 95,
+		'& h1': {
+			fontSize: 24,
+			fontWeight: 350,
+			color: 'rgba(0, 0, 0, 0.3)'
 		}
 	}
 })

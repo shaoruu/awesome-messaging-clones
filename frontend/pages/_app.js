@@ -28,7 +28,7 @@ class MainApp extends App {
 		return (
 			<Container>
 				<Head>
-					<title>Messenger</title>
+					<title>Awesome Messenger</title>
 				</Head>
 				{/* Wrap every page in Jss and Theme providers */}
 				<JssProvider
