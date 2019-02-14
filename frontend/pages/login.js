@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { checkLoggedIn, redirect } from '../lib/utils'
-import { LoginBox } from '../components'
+import { LoginForm } from '../components'
 
 export default class Login extends Component {
 	static async getInitialProps(context) {
@@ -15,6 +15,6 @@ export default class Login extends Component {
 	}
 
 	render() {
-		return <LoginBox />
+		return <LoginForm />
 	}
 }

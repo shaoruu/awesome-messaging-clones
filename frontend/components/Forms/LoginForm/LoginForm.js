@@ -9,11 +9,11 @@ import {
 	FormControlLabel
 } from '@material-ui/core'
 
-import { redirect, setCookie } from '../../lib/utils'
-import { LOGIN_MUTATION, LOGIN_SCHEMA } from '../../lib/graphql'
-import { Logo } from '..'
+import { redirect, setCookie } from '../../../lib/utils'
+import { LOGIN_MUTATION, LOGIN_SCHEMA } from '../../../lib/graphql'
+import Logo from '../../Logo/Logo'
 
-class LoginBox extends Component {
+class LoginForm extends Component {
 	state = {
 		keepMeLoggedIn: false
 	}
@@ -65,84 +65,101 @@ class LoginBox extends Component {
 								handleSubmit,
 								isSubmitting
 							}) => (
-								<form onSubmit={handleSubmit} className={classes.form}>
-									<Logo className={classes.logo} />
-									<h1 className={classes.title}>Awesome Messenger</h1>
-									<h2 className={classes.description}>
-										Instantly connect with people in your life.
-									</h2>
-									<h2 className={classes.description}>
-										Sign in to get started.
-									</h2>
-									<div className={classes.inputFieldContainer}>
-										<FormControl aria-describedby="error-text">
-											<input
-												required
-												id="username"
-												name="username"
-												value={values.username}
-												label="Username"
-												onChange={handleChange}
-												onBlur={handleBlur}
-												placeholder="Username"
-												margin="normal"
-												className={classes.textField}
-												variant="outlined"
-											/>
-											{(touched.username &&
-												errors &&
-												errors.username && (
-													<FormHelperText id="error-text" error>
-														{errors.username}
-													</FormHelperText>
-												)) ||
-												(error &&
-													error.message.includes(
-														'credentials'
-													) && (
+								<>
+									<form
+										onSubmit={handleSubmit}
+										className={classes.form}>
+										<Logo className={classes.logo} />
+										<h1 className={classes.title}>
+											Awesome Messenger
+										</h1>
+										<h2 className={classes.description}>
+											Instantly connect with people in your life.
+										</h2>
+										<h2 className={classes.description}>
+											Sign in to get started.
+										</h2>
+										<div className={classes.inputFieldContainer}>
+											<FormControl aria-describedby="error-text">
+												<input
+													required
+													id="username"
+													name="username"
+													value={values.username}
+													label="Username"
+													onChange={handleChange}
+													onBlur={handleBlur}
+													placeholder="Username"
+													margin="normal"
+													className={classes.textField}
+													variant="outlined"
+												/>
+												{(touched.username &&
+													errors &&
+													errors.username && (
 														<FormHelperText
 															id="error-text"
 															error>
-															Invalid username or password.
+															{errors.username}
 														</FormHelperText>
-													))}
-										</FormControl>
-										<FormControl aria-describedby="error-text">
-											<input
-												// required
-												id="password"
-												name="password"
-												value={values.password}
-												type="password"
-												autoComplete="current-password"
-												label="Password"
-												onChange={handleChange}
-												onBlur={handleBlur}
-												placeholder="Password"
-												className={classes.textField}
-												variant="outlined"
-											/>
-											{touched.password &&
-												errors &&
-												errors.password && (
-													<FormHelperText id="error-text" error>
-														{errors.password}
-													</FormHelperText>
-												)}
-										</FormControl>
-									</div>
-									<div className={classes.buttonWrapper}>
-										<button
-											type="submit"
-											disabled={
-												isSubmitting ||
-												!!(errors.username && touched.username) ||
-												!!(errors.password && touched.password)
-											}
-											className={classes.continueButton}>
-											Continue
-										</button>
-									</div>
+													)) ||
+													(error &&
+														error.message.includes(
+															'credentials'
+														) && (
+															<FormHelperText
+																id="error-text"
+																error>
+																Invalid username or
+																password.
+															</FormHelperText>
+														))}
+											</FormControl>
+											<FormControl aria-describedby="error-text">
+												<input
+													// required
+													id="password"
+													name="password"
+													value={values.password}
+													type="password"
+													autoComplete="current-password"
+													label="Password"
+													onChange={handleChange}
+													onBlur={handleBlur}
+													placeholder="Password"
+													className={classes.textField}
+													variant="outlined"
+												/>
+												{touched.password &&
+													errors &&
+													errors.password && (
+														<FormHelperText
+															id="error-text"
+															error>
+															{errors.password}
+														</FormHelperText>
+													)}
+											</FormControl>
+										</div>
+										<div className={classes.buttonWrapper}>
+											<button
+												type="submit"
+												disabled={
+													isSubmitting ||
+													!!(
+														errors.username &&
+														touched.username
+													) ||
+													!!(
+														errors.password &&
+														touched.password
+													)
+												}
+												className={classes.continueButton}>
+												Continue
+											</button>
+										</div>
+									</form>
 									<div className={classes.keepMeLoggedInWrapper}>
 										<FormControlLabel
 											control={
@@ -155,8 +172,8 @@ class LoginBox extends Component {
 											}
 											label={<h1>Keep me signed in</h1>}
 										/>
-									</div>
-								</form>
+									</div>{' '}
+								</>
 							)}
 						/>
 					)}
@@ -173,7 +190,7 @@ const styles = theme => ({
 	form: {
 		display: 'flex',
 		width: 600,
-		height: '120%',
+		height: '100%',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -242,7 +259,8 @@ const styles = theme => ({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 95,
+		marginTop: 10,
+		marginBottom: 20,
 		'& h1': {
 			fontSize: 24,
 			fontWeight: 350,
@@ -251,4 +269,4 @@ const styles = theme => ({
 	}
 })
 
-export default withApollo(withStyles(styles)(LoginBox))
+export default withApollo(withStyles(styles)(LoginForm))
