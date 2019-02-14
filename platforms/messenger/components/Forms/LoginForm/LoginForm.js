@@ -145,6 +145,8 @@ class LoginForm extends Component {
 											<button
 												type="submit"
 												disabled={
+													!values.username ||
+													!values.password ||
 													isSubmitting ||
 													!!(
 														errors.username &&
@@ -190,7 +192,7 @@ const styles = theme => ({
 	form: {
 		display: 'flex',
 		width: 600,
-		height: '100%',
+		height: '90%',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -202,8 +204,8 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'center',
 		'&>img': {
-			maxWidth: 120,
-			maxHeight: 120
+			maxWidth: 110,
+			maxHeight: 110
 		}
 	},
 	title: {
@@ -223,10 +225,10 @@ const styles = theme => ({
 	},
 	inputFieldContainer: {
 		display: 'flex',
-		width: '100%',
+		width: 450,
 		flexDirection: 'column',
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'centerz',
 		position: 'relative'
 	},
 	textField: {
@@ -236,6 +238,7 @@ const styles = theme => ({
 		fontSize: 24,
 		border: 'rgba(0, 0, 0, 0.2) 1.5px solid',
 		borderRadius: 5,
+		margin: 'auto',
 		marginTop: 10,
 		'&:last-child': {
 			marginBottom: 20
@@ -245,14 +248,27 @@ const styles = theme => ({
 			color: 'rgba(0, 0, 0, 0.4)'
 		}
 	},
-	buttonWrapper: {},
+	buttonWrapper: {
+		position: 'relative'
+	},
 	continueButton: {
 		background: 'transparent',
 		border: 'none',
 		cursor: 'pointer',
 		fontSize: 32,
+		width: '100%',
+		height: 40,
 		marginTop: 24,
-		color: '#0084ff'
+		color: '#0084ff',
+		borderRadius: 15,
+		transition: 'all .1s',
+		'&:active': {
+			fontSize: 31,
+			outline: 'none'
+		},
+		'&:disabled': {
+			color: '#8B8B8B'
+		}
 	},
 	keepMeLoggedInWrapper: {
 		display: 'flex',
