@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import { Mutation, withApollo } from 'react-apollo'
 import { Formik } from 'formik'
 import {
-	TextField,
 	FormControl,
 	FormHelperText,
-	Button,
 	withStyles,
 	Checkbox,
 	FormControlLabel
