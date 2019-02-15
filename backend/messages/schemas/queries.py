@@ -12,8 +12,9 @@ class MessageFilter(django_filters.FilterSet):
         model = Message
         fields = {
             'message': ['exact', 'icontains'],
-            'user__username': ['exact', 'icontains', 'istartswith'],
-            'chatroom__name': ['exact', 'icontains', 'istartswith']
+            'sender__user__username': ['exact', 'icontains', 'istartswith'],
+            'chatroom__name': ['exact', 'icontains', 'istartswith'],
+            'chatroom__unique_identifier': ['exact']
         }
 
 

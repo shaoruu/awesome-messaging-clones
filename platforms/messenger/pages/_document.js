@@ -5,8 +5,6 @@ import flush from 'styled-jsx/server'
 
 class MainDocument extends Document {
 	render() {
-		const { pageContext } = this.props
-
 		return (
 			<html lang="en" dir="ltr" style={{ height: '100%' }}>
 				<Head>

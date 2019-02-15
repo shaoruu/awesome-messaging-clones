@@ -6,9 +6,11 @@ from graphql_jwt.decorators import login_required
 from backend.utils import clean_input
 from backend.enums import MutationTypes
 from backend.chatrooms.models import Chatroom as ChatroomModel
+from backend.chatroom_memberships.models import ChatroomMembership as ChatroomMembershipModel
 from ..models import Message as MessageModel
 from .queries import MessageNode
 from .subscriptions import MessageSubscriptions
+from backend.chatrooms.schemas.subscriptions import ChatroomSubscriptions
 
 
 class CreateMessage(relay.ClientIDMutation):
@@ -25,11 +27,13 @@ class CreateMessage(relay.ClientIDMutation):
         chatroom = ChatroomModel.objects.get(
             unique_identifier=input.pop('chatroom_id'))
         sent_user = info.context.user
+        chatroom_member = ChatroomMembershipModel.objects.get(
+            chatroom=chatroom, user=sent_user)
 
         input = clean_input(input)
 
         new_message = MessageModel(message=input.get(
-            'message'), user=sent_user, chatroom=chatroom)
+            'message'), sender=chatroom_member, chatroom=chatroom)
         new_message.save()
 
         MessageSubscriptions.broadcast(
@@ -37,6 +41,14 @@ class CreateMessage(relay.ClientIDMutation):
             payload={
                 "type": MutationTypes.CREATE.name,
                 "message_id": new_message.unique_identifier
+            }
+        )
+
+        ChatroomSubscriptions.broadcast(
+            group='{}-chatroom-subscription'.format(sent_user.username),
+            payload={
+                "type": MutationTypes.UPDATE.name,
+                "chatroom_id": chatroom.unique_identifier
             }
         )
 

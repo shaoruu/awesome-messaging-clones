@@ -2,6 +2,7 @@ export { default as withApollo } from './withApollo'
 
 export {
 	ME_QUERY,
+	ME_CHATROOMS_QUERY,
 	USER_QUERY,
 	USERS_QUERY,
 	MESSAGE_QUERY,

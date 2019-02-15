@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'graphql_playground',
     'graphene_django',
     'backend.chatrooms',
-    'backend.chatroom_members',
+    'backend.chatroom_memberships',
     'backend.messages',
     'backend.users'
 ]

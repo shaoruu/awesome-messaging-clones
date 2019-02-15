@@ -33,7 +33,11 @@ class LoginForm extends Component {
 				<Mutation
 					mutation={LOGIN_MUTATION}
 					onCompleted={data => {
-						if (this.state.keepMeLoggedIn) setCookie(data.login.token)
+						// TODO: Figure out how to sign user out on tab close
+						if (!this.state.keepMeLoggedIn)
+							sessionStorage.setItem('keepMeLoggedIn', 'yes')
+
+						setCookie(data.login.token)
 
 						// Force a reload of all current queries now that user is
 						// logged in
@@ -99,7 +103,10 @@ class LoginForm extends Component {
 													errors.username && (
 														<FormHelperText
 															id="error-text"
-															error>
+															error
+															className={
+																classes.errorMessage
+															}>
 															{errors.username}
 														</FormHelperText>
 													)) ||
@@ -109,7 +116,10 @@ class LoginForm extends Component {
 														) && (
 															<FormHelperText
 																id="error-text"
-																error>
+																error
+																className={
+																	classes.errorMessage
+																}>
 																Invalid username or
 																password.
 															</FormHelperText>
@@ -135,7 +145,10 @@ class LoginForm extends Component {
 													errors.password && (
 														<FormHelperText
 															id="error-text"
-															error>
+															error
+															className={
+																classes.errorMessage
+															}>
 															{errors.password}
 														</FormHelperText>
 													)}
@@ -247,6 +260,9 @@ const styles = theme => ({
 			fontWeight: 300,
 			color: 'rgba(0, 0, 0, 0.4)'
 		}
+	},
+	errorMessage: {
+		marginLeft: 25
 	},
 	buttonWrapper: {
 		position: 'relative'

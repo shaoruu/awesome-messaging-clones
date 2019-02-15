@@ -2,21 +2,21 @@ from graphene import relay
 import django_filters
 from graphene_django import DjangoObjectType
 
-from backend.chatroom_members.models import ChatroomMember
+from ..models import ChatroomMembership
 
 
-class ChatroomMemberFilter(django_filters.FilterSet):
+class ChatroomMembershipFilter(django_filters.FilterSet):
 
     class Meta:
-        model = ChatroomMember
+        model = ChatroomMembership
         fields = {
             'user__username': ['exact', 'icontains', 'istartswith'],
             'chatroom__name': ['exact', 'icontains', 'istartswith']
         }
 
 
-class ChatroomMemberNode(DjangoObjectType):
+class ChatroomMembershipNode(DjangoObjectType):
 
     class Meta:
-        model = ChatroomMember
+        model = ChatroomMembership
         interfaces = (relay.Node,)

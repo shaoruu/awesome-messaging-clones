@@ -6,7 +6,7 @@ import JssProvider from 'react-jss/lib/JssProvider'
 import Head from 'next/head'
 import { MuiThemeProvider } from '@material-ui/core'
 
-import { getPageContext } from '../lib/utils'
+import { getPageContext, signout } from '../lib/utils'
 import { withApollo } from '../lib/graphql'
 
 class MainApp extends App {

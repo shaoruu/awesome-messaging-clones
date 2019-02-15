@@ -4,8 +4,10 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from backend.chatrooms.models import Chatroom as ChatroomModel
-from ..models import ChatroomMember as ChatroomMemberModel
-from .queries import ChatroomMemberNode
+from backend.enums import MutationTypes
+from ..models import ChatroomMembership as ChatroomMembershipModel
+from .queries import ChatroomMembershipNode
+from .subscriptions import ChatroomMembershipSubscriptions
 
 
 class JoinChatroom(relay.ClientIDMutation):
@@ -14,11 +16,11 @@ class JoinChatroom(relay.ClientIDMutation):
             required=True, description="Unique identifier of the chatroom")
 
     ' Fields '
-    chatroom_membership = graphene.Field(ChatroomMemberNode)
+    chatroom_membership = graphene.Field(ChatroomMembershipNode)
 
     @login_required
     def mutate_and_get_payload(root, info, **input):
-        if ChatroomMemberModel.objects.filter(
+        if ChatroomMembershipModel.objects.filter(
                 user__username=info.context.user.username,
                 chatroom__unique_identifier=input.get('chatroom_id')).exists():
             raise GraphQLError("Already Joined.")
@@ -32,6 +34,15 @@ class JoinChatroom(relay.ClientIDMutation):
         )
         new_chatroom_membership.save()
 
+        ChatroomMembershipSubscriptions.broadcast(
+            group='{}-chatroom-member-subscription'.format(
+                info.context.user.username),
+            payload={
+                "type": MutationTypes.CRREATE.name,
+                "chatroom_membership_id": new_chatroom_membership.unique_identifier
+            }
+        )
+
         return JoinChatroom(chatroom_membership=new_chatroom_membership)
 
 
@@ -44,7 +55,7 @@ class LeaveChatroom(relay.ClientIDMutation):
     successful = graphene.Boolean()
 
     def mutate_and_get_payload(root, info, **input):
-        chatroom_membership = ChatroomMemberModel.objects.get(
+        chatroom_membership = ChatroomMembershipModel.objects.get(
             user__username=info.context.user.username,
             chatroom__unique_identifier=input.get('chatroom_id'))
 

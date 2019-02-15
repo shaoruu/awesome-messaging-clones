@@ -1,3 +1,5 @@
+import cookie from 'cookie'
+
 import redirect from './redirect'
 
 export default apolloClient => {
@@ -7,8 +9,8 @@ export default apolloClient => {
 
 	// Forece a reload of all the current queries now that user is
 	// logged in, so we don't accidentally leave any state around.
-	apolloClient.cache.reset().the(() => {
+	apolloClient.cache.reset().then(() => {
 		// Redirect to a more useful page when signed out
-		redirect({}, '/signin')
+		redirect({}, '/login')
 	})
 }

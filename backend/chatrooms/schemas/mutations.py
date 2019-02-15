@@ -5,7 +5,9 @@ from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
 from backend.enums import MutationTypes
-from backend.chatroom_members.models import ChatroomMember as ChatroomMemberModel
+from backend.chatroom_memberships.models import ChatroomMembership as ChatroomMembershipModel
+from backend.chatroom_memberships.schemas.subscriptions import ChatroomMembershipSubscriptions
+from backend.messages.models import Message as MessageModel
 from ..models import Chatroom as ChatroomModel
 from .queries import ChatroomNode
 from .subscriptions import ChatroomSubscriptions
@@ -28,9 +30,13 @@ class CreateChatroom(relay.ClientIDMutation):
         new_chatroom.save()
 
         # adding the creator to the chatroom
-        chatroom_member = ChatroomMemberModel(
+        chatroom_membership = ChatroomMembershipModel(
             chatroom=new_chatroom, user=info.context.user)
-        chatroom_member.save()
+        chatroom_membership.save()
+
+        creation_message = MessageModel(sender=chatroom_membership, chatroom=new_chatroom,
+                                        message="{} created this chatroom!".format(info.context.user.username))
+        creation_message.save()
 
         ChatroomSubscriptions.broadcast(
             group='{}-chatroom-subscription'.format(
@@ -38,6 +44,15 @@ class CreateChatroom(relay.ClientIDMutation):
             payload={
                 "type": MutationTypes.CREATE.name,
                 "chatroom_id": new_chatroom.unique_identifier
+            }
+        )
+
+        ChatroomMembershipSubscriptions.broadcast(
+            group='{}-chatroom-member-subscription'.format(
+                info.context.user.username),
+            payload={
+                "type": MutationTypes.CRREATE.name,
+                "chatroom_membership_id": chatroom_membership.unique_identifier
             }
         )
 

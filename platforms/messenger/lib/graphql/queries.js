@@ -21,6 +21,55 @@ export const USER_QUERY = gql`
 	}
 `
 
+export const ME_CHATROOMS_QUERY = gql`
+	query MeChatrooms(
+		$chatroomBefore: String
+		$chatroomAfter: String
+		$chatroomFirst: Int
+		$chatroomLast: Int
+		$messagesBefore: String
+		$messagesAfter: String
+		$messagesFirst: Int
+		$messagesLast: Int
+	) {
+		me {
+			chatroomMemberships(
+				before: $chatroomBefore
+				after: $chatroomAfter
+				first: $chatroomFirst
+				last: $chatroomLast
+			) {
+				edges {
+					node {
+						chatroom {
+							uniqueIdentifier
+							name
+							messages(
+								before: $messagesBefore
+								after: $messagesAfter
+								first: $messagesFirst
+								last: $messagesLast
+							) {
+								edges {
+									node {
+										sender {
+											nickname
+											user {
+												username
+											}
+										}
+										message
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`
+
 export const USERS_QUERY = gql`
 	query Users(
 		$before: String
@@ -69,10 +118,11 @@ export const MESSAGES_QUERY = gql`
 		$message_Icontains: String
 		$user_Username: String
 		$user_Username_Icontains: String
-		$username_Username_Istartswith: String
+		$user_Username_Istartswith: String
 		$chatroom_Name: String
 		$chatroom_Name_Icontains: String
 		$chatroom_Name_Istartswith: String
+		$chatroom_UniqueIdentifier: String
 	) {
 		messages(
 			before: $before
@@ -80,12 +130,13 @@ export const MESSAGES_QUERY = gql`
 			first: $first
 			last: $last
 			message_Icontains: $message_Icontains
-			user_Username: $user_Username
-			user_Username_Icontains: $user_Username_Icontains
-			username_Username_Istartswith: $username_Username_Istartswith
+			sender_User_Username: $user_Username
+			sender_User_Username_Icontains: $user_Username_Icontains
+			sender_User_Username_Istartswith: $user_Username_Istartswith
 			chatroom_Name: $chatroom_Name
 			chatroom_Name_Icontains: $chatroom_Name_Icontains
 			chatroom_Name_Istartswith: $chatroom_Name_Istartswith
+			chatroom_UniqueIdentifier: $chatroom_UniqueIdentifier
 		) {
 			edges {
 				node {
