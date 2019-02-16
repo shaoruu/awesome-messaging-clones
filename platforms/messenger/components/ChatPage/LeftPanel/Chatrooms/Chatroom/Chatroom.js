@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default props => {
 	const {
 		data: {
@@ -11,9 +13,13 @@ export default props => {
 
 	if (!messages[0]) {
 		return (
-			<div>
-				<p>{`${uniqueIdentifier}|${chatroomName}:`}</p>
-			</div>
+			<li>
+				<Link
+					as={`/chat/${uniqueIdentifier}`}
+					href={`/chat?id=${uniqueIdentifier}`}>
+					<p style={{ margin: '5px 0' }}>{`${chatroomName}:`}</p>
+				</Link>
+			</li>
 		)
 	}
 
@@ -30,8 +36,13 @@ export default props => {
 	const senderName = nickname || username
 
 	return (
-		<div>
-			<p>{`${uniqueIdentifier}|${chatroomName}: ${senderName}: ${message}`}</p>
-		</div>
+		<li>
+			<Link as={`/chat/${uniqueIdentifier}`} href={`/chat?id=${uniqueIdentifier}`}>
+				<p
+					style={{
+						margin: '5px 0'
+					}}>{`${chatroomName}: ${senderName}: ${message}`}</p>
+			</Link>
+		</li>
 	)
 }

@@ -30,7 +30,9 @@ const styles = theme => ({
 	},
 	leftPanel: {
 		gridColumn: '1/6',
-		border: '1px solid black'
+		border: '1px solid black',
+		display: 'flex',
+		flexDirection: 'column'
 	}
 })
 

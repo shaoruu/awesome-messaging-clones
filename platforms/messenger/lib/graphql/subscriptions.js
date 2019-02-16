@@ -18,7 +18,14 @@ export const MESSAGE_SUBSCRIPTIONS = gql`
 			mutationType
 			message {
 				# TODO: add more query returned data field
+				uniqueIdentifier
 				message
+				sender {
+					nickname
+					user {
+						username
+					}
+				}
 			}
 		}
 	}

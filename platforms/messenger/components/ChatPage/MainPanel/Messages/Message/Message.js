@@ -1,7 +1,17 @@
 export default props => {
+	const {
+		message,
+		sender: {
+			nickname,
+			user: { username }
+		}
+	} = props.data
+
+	const senderName = nickname ? nickname : username
+
 	return (
-		<div>
-			<p>{props.message}</p>
-		</div>
+		<li>
+			<p>{`${senderName}: ${message}`}</p>
+		</li>
 	)
 }

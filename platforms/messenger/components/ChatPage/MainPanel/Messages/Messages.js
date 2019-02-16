@@ -15,21 +15,32 @@ export default class Messages extends Component {
 				if (!subscriptionData.data) return prev
 
 				const {
-					messageSubscriptions: { mutationType, message }
-				} = subscriptionData.data
+					mutationType,
+					message
+				} = subscriptionData.data.messageSubscriptions
 
-				return Object.assign({}, prev, {
-					messages: {
-						edges: [
-							...prev.messages.edges,
-							{
-								node: message,
-								__typename: 'MessageNodeEdge'
-							}
-						],
-						__typename: prev.messages.__typename
-					}
-				})
+				const alteredMessage = {
+					node: message,
+					__typename: 'MessageNodeEdge'
+				}
+
+				switch (mutationType) {
+					case 'CREATE':
+						prev.messages.edges.push(alteredMessage)
+						return prev
+					case 'UPDATE':
+						const index = prev.messages.edges.findIndex(
+							ele => ele.node.uniqueIdentifier === message.uniqueIdentifier
+						)
+						prev.messages.edges[index] = alteredMessage
+						return prev
+					case 'DELETE':
+						return prev.messages.edges.filter(
+							ele => ele.node.uniqueIdentifier !== message.uniqueIdentifier
+						)
+					default:
+						return prev
+				}
 			}
 		})
 	}
@@ -50,16 +61,17 @@ export default class Messages extends Component {
 							console.log(error)
 							return <div>Error</div>
 						}
+
 						if (process.browser) this._subscribeToNewMessages(subscribeToMore)
 
 						const { edges: messages } = data.messages
 
 						return (
-							<div>
+							<ul>
 								{messages.map((ele, index) => (
-									<Message key={index} message={ele.node.message} />
+									<Message key={index} data={ele.node} />
 								))}
-							</div>
+							</ul>
 						)
 					}}
 				</Query>

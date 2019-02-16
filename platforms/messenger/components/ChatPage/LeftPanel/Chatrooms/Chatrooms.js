@@ -24,12 +24,14 @@ export default class Chatrooms extends Component {
 					chatroomMembership
 				} = subscriptionData.data.chatroomMembershipSubscriptions
 
+				const alteredChatroomMembership = {
+					node: chatroomMembership,
+					__typename: 'ChatroomMembershipNodeConnection'
+				}
+
 				switch (mutationType) {
 					case 'CREATE':
-						prev.chatroomMemberships.edges.unshift({
-							node: chatroomMembership,
-							__typename: 'ChatroomMembershipNodeConnection'
-						})
+						prev.chatroomMemberships.edges.unshift(alteredChatroomMembership)
 						return prev
 					case 'UPDATE':
 						prev.chatroomMemberships.edges = prev.chatroomMemberships.edges.filter(
@@ -37,10 +39,7 @@ export default class Chatrooms extends Component {
 								ele.node.uniqueIdentifier !==
 								chatroomMembership.uniqueIdentifier
 						)
-						prev.chatroomMemberships.edges.unshift({
-							node: chatroomMembership,
-							__typename: 'ChatroomMembershipNodeConnection'
-						})
+						prev.chatroomMemberships.edges.unshift(alteredChatroomMembership)
 						console.log(chatroomMembership)
 						return prev
 					case 'DELETE':
@@ -83,9 +82,11 @@ export default class Chatrooms extends Component {
 
 						return (
 							<div>
-								{chatrooms.map((ele, index) => (
-									<Chatroom key={index} data={ele.node} />
-								))}
+								<ul>
+									{chatrooms.map((ele, index) => (
+										<Chatroom key={index} data={ele.node} />
+									))}
+								</ul>
 							</div>
 						)
 					}}

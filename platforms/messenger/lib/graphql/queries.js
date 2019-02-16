@@ -92,7 +92,14 @@ export const MESSAGES_QUERY = gql`
 			edges {
 				node {
 					# TODO: add more query returned data field
+					uniqueIdentifier
 					message
+					sender {
+						nickname
+						user {
+							username
+						}
+					}
 				}
 			}
 		}
