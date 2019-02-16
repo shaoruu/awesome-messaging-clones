@@ -207,7 +207,7 @@ class BaseSubscription(graphene.ObjectType):
         """
 
         try:
-            event_loop = asyncio.get_event_loop()
+            event_loop = asyncio.get_running_loop()
         except RuntimeError:
             pass
         else:
@@ -731,7 +731,7 @@ class GraphQLSubscriptionConsumer(ch_websocket.AsyncJsonWebsocketConsumer):
         if self.strict_ordering:
             await process_message()
         else:
-            background_task = asyncio.get_event_loop().create_task(process_message())
+            background_task = asyncio.create_task(process_message())
             self._background_tasks.append(background_task)
             # Schedule automatic removal from the list when finishes.
             background_task.add_done_callback(self._background_tasks.remove)
@@ -779,7 +779,7 @@ class GraphQLSubscriptionConsumer(ch_websocket.AsyncJsonWebsocketConsumer):
         if self.strict_ordering:
             await process_broadcast()
         else:
-            background_task = asyncio.get_event_loop().create_task(process_broadcast())
+            background_task = asyncio.create_task(process_broadcast())
             self._background_tasks.append(background_task)
             # Schedule automatic removal from the list when finishes.
             background_task.add_done_callback(self._background_tasks.remove)
