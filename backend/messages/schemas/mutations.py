@@ -1,16 +1,15 @@
 import graphene
 from graphene import relay
 from graphql import GraphQLError
-from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
 from backend.enums import MutationTypes
 from backend.chatrooms.models import Chatroom as ChatroomModel
 from backend.chatroom_memberships.models import ChatroomMembership as ChatroomMembershipModel
+from backend.chatroom_memberships.schemas.subscriptions import ChatroomMembershipSubscriptions
 from ..models import Message as MessageModel
 from .queries import MessageNode
 from .subscriptions import MessageSubscriptions
-from backend.chatrooms.schemas.subscriptions import ChatroomSubscriptions
 
 
 class CreateMessage(relay.ClientIDMutation):
@@ -22,7 +21,6 @@ class CreateMessage(relay.ClientIDMutation):
     ' Fields '
     message = graphene.Field(MessageNode)
 
-    @login_required
     def mutate_and_get_payload(root, info, **input):
         chatroom = ChatroomModel.objects.get(
             unique_identifier=input.pop('chatroom_id'))
@@ -44,11 +42,12 @@ class CreateMessage(relay.ClientIDMutation):
             }
         )
 
-        ChatroomSubscriptions.broadcast(
-            group='{}-chatroom-subscription'.format(sent_user.username),
+        ChatroomMembershipSubscriptions.broadcast(
+            group='{}-chatroom-membership-subscription'.format(
+                sent_user.username),
             payload={
                 "type": MutationTypes.UPDATE.name,
-                "chatroom_id": chatroom.unique_identifier
+                "chatroom_membership_id": chatroom_member.unique_identifier
             }
         )
 
@@ -64,7 +63,6 @@ class UpdateMessage(relay.ClientIDMutation):
     ' Fields '
     message = graphene.Field(MessageNode)
 
-    @login_required
     def mutate_and_get_payload(root, info, **input):
         message = MessageModel.objects.get(
             unique_identifier=input.pop('message_id'))
@@ -94,7 +92,6 @@ class DeleteMessage(relay.ClientIDMutation):
     ' Fields '
     successful = graphene.Boolean()
 
-    @login_required
     def mutate_and_get_payload(root, info, **input):
         message = MessageModel.objects.get(
             unique_identifier=input.get('message_id'))

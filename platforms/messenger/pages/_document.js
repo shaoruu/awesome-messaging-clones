@@ -37,7 +37,7 @@ class MainDocument extends Document {
 					style={{
 						height: '100%',
 						fontFamily:
-							'Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;'
+							'Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif'
 					}}>
 					<Main />
 					<NextScript />

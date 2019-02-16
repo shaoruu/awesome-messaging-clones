@@ -13,7 +13,7 @@ class Query(graphene.ObjectType):
     chatroom_memberships = DjangoFilterConnectionField(
         ChatroomMembershipNode, filterset_class=ChatroomMembershipFilter)
 
-    def resolve_chatroom_member(self, info, unique_identifier):
+    def resolve_chatroom_membership(self, info, unique_identifier):
         return ChatroomMembershipModel.objects.get(unique_identifier=unique_identifier)
 
 
@@ -23,4 +23,4 @@ class Mutation(graphene.ObjectType):
 
 
 class Subscription(graphene.ObjectType):
-    chatroom_memberships_subscriptions = ChatroomMembershipSubscriptions.Field()
+    chatroom_membership_subscriptions = ChatroomMembershipSubscriptions.Field()

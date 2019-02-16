@@ -3,7 +3,6 @@ from graphene import relay
 import graphql_jwt
 from graphql import GraphQLError
 from django.contrib.auth import authenticate, login, logout
-from graphql_jwt.decorators import login_required
 
 from backend.utils import clean_input
 from backend.enums import SpecialMutationTypes

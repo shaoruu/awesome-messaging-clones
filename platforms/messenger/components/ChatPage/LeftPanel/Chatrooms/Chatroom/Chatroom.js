@@ -2,11 +2,20 @@ export default props => {
 	const {
 		data: {
 			chatroom: {
+				uniqueIdentifier,
 				name: chatroomName,
-				messages: { edges: singleMessage }
+				messages: { edges: messages }
 			}
 		}
 	} = props
+
+	if (!messages[0]) {
+		return (
+			<div>
+				<p>{`${uniqueIdentifier}|${chatroomName}:`}</p>
+			</div>
+		)
+	}
 
 	const {
 		node: {
@@ -16,13 +25,13 @@ export default props => {
 			},
 			message
 		}
-	} = singleMessage[0]
+	} = messages[0]
 
 	const senderName = nickname || username
 
 	return (
 		<div>
-			<p>{`${chatroomName}: ${senderName}: ${message}`}</p>
+			<p>{`${uniqueIdentifier}|${chatroomName}: ${senderName}: ${message}`}</p>
 		</div>
 	)
 }

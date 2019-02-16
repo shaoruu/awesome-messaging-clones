@@ -20,7 +20,7 @@ class ChatroomMembership(models.Model):
     REQUIRED_FIELDS = ['chatroom', 'user']
 
     class Meta:
-        ordering = ['updated_at']
+        ordering = ['-updated_at']
 
     def __str__(self):
         return "{0} in {1}".format(self.user.username, self.chatroom.name)

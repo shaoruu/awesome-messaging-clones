@@ -58,3 +58,41 @@ export const CHATROOM_SUBSCRIPTIONS = gql`
 		}
 	}
 `
+
+export const CHATROOM_MEMBERSHIP_SUBSCRIPTIONS = gql`
+	subscription ChatroomMembershipsSubscriptions(
+		$messagesBefore: String
+		$messagesAfter: String
+		$messagesFirst: Int
+		$messagesLast: Int
+	) {
+		chatroomMembershipSubscriptions {
+			mutationType
+			chatroomMembership {
+				uniqueIdentifier
+				chatroom {
+					uniqueIdentifier
+					name
+					messages(
+						before: $messagesBefore
+						after: $messagesAfter
+						first: $messagesFirst
+						last: $messagesLast
+					) {
+						edges {
+							node {
+								sender {
+									nickname
+									user {
+										username
+									}
+								}
+								message
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`

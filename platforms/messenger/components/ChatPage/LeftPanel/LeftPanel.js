@@ -8,7 +8,7 @@ class MainPanel extends Component {
 	render() {
 		return (
 			<div className={this.props.className}>
-				<Chatrooms />
+				<Chatrooms username={this.props.username} />
 			</div>
 		)
 	}

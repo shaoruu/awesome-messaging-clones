@@ -1,7 +1,6 @@
 import graphene
 from graphene import relay
 from graphql import GraphQLError
-from graphql_jwt.decorators import login_required
 
 from backend.chatrooms.models import Chatroom as ChatroomModel
 from backend.enums import MutationTypes
@@ -18,7 +17,6 @@ class JoinChatroom(relay.ClientIDMutation):
     ' Fields '
     chatroom_membership = graphene.Field(ChatroomMembershipNode)
 
-    @login_required
     def mutate_and_get_payload(root, info, **input):
         if ChatroomMembershipModel.objects.filter(
                 user__username=info.context.user.username,
@@ -28,17 +26,17 @@ class JoinChatroom(relay.ClientIDMutation):
         chatroom = ChatroomModel.objects.get(
             unique_identifier=input.get('chatroom_id'))
 
-        new_chatroom_membership = ChatroomMemberModel(
+        new_chatroom_membership = ChatroomMembershipModel(
             user=info.context.user,
             chatroom=chatroom
         )
         new_chatroom_membership.save()
 
         ChatroomMembershipSubscriptions.broadcast(
-            group='{}-chatroom-member-subscription'.format(
+            group='{}-chatroom-membership-subscription'.format(
                 info.context.user.username),
             payload={
-                "type": MutationTypes.CRREATE.name,
+                "type": MutationTypes.CREATE.name,
                 "chatroom_membership_id": new_chatroom_membership.unique_identifier
             }
         )

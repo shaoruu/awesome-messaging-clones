@@ -16,12 +16,13 @@ class Chat extends Component {
 			redirect(context, '/login')
 		}
 
-		return { chatroomId: id }
+		return { chatroomId: id, username: me.username }
 	}
 
 	render() {
-		if (!this.props.chatroomId) return null
-		return <ChatPage chatroomId={this.props.chatroomId} />
+		return (
+			<ChatPage chatroomId={this.props.chatroomId} username={this.props.username} />
+		)
 	}
 }
 

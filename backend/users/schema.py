@@ -1,7 +1,6 @@
 import graphene
 from graphene_django.filter import DjangoFilterConnectionField
 import graphql_jwt
-from graphql_jwt.decorators import login_required
 
 from .schemas.queries import UserFilter, UserNode
 from .schemas.mutations import Register, Login
@@ -16,7 +15,6 @@ class Query(graphene.ObjectType):
         UserNode, filterset_class=UserFilter)
     me = graphene.Field(UserNode)
 
-    @login_required
     def resolve_me(self, info):
         return info.context.user
 

@@ -10,7 +10,7 @@ class ChatPage extends Component {
 
 		return (
 			<div className={classes.root}>
-				{/* <LeftPanel className={classes.leftPanel} /> */}
+				<LeftPanel className={classes.leftPanel} username={this.props.username} />
 				<MainPanel
 					chatroomId={this.props.chatroomId}
 					className={classes.mainPanel}
@@ -29,7 +29,8 @@ const styles = theme => ({
 		gridColumn: '6/16'
 	},
 	leftPanel: {
-		gridColumn: '1/6'
+		gridColumn: '1/6',
+		border: '1px solid black'
 	}
 })
 

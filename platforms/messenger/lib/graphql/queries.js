@@ -21,55 +21,6 @@ export const USER_QUERY = gql`
 	}
 `
 
-export const ME_CHATROOMS_QUERY = gql`
-	query MeChatrooms(
-		$chatroomBefore: String
-		$chatroomAfter: String
-		$chatroomFirst: Int
-		$chatroomLast: Int
-		$messagesBefore: String
-		$messagesAfter: String
-		$messagesFirst: Int
-		$messagesLast: Int
-	) {
-		me {
-			chatroomMemberships(
-				before: $chatroomBefore
-				after: $chatroomAfter
-				first: $chatroomFirst
-				last: $chatroomLast
-			) {
-				edges {
-					node {
-						chatroom {
-							uniqueIdentifier
-							name
-							messages(
-								before: $messagesBefore
-								after: $messagesAfter
-								first: $messagesFirst
-								last: $messagesLast
-							) {
-								edges {
-									node {
-										sender {
-											nickname
-											user {
-												username
-											}
-										}
-										message
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-`
-
 export const USERS_QUERY = gql`
 	query Users(
 		$before: String
@@ -180,6 +131,77 @@ export const CHATROOMS_QUERY = gql`
 				node {
 					# TODO: add more query returned data field
 					name
+				}
+			}
+		}
+	}
+`
+
+export const CHATROOM_MEMBERSHIP_QUERY = gql`
+	query ChatroomMembership($uniqueIdentifier: String!) {
+		chatroomMembership(uniqueIdentifier: $uniqueIdentifier) {
+			# TODO: add more query returned data field
+			chatroom {
+				name
+			}
+		}
+	}
+`
+
+export const CHATROOM_MEMBERSHIPS_QUERY = gql`
+	query ChatroomMemberships(
+		$before: String
+		$after: String
+		$first: Int
+		$last: Int
+		$user_Username: String
+		$user_Username_Icontains: String
+		$user_Username_Istartswith: String
+		$chatroom_Name: String
+		$chatroom_Name_Icontains: String
+		$chatroom_Name_Istartswith: String
+		$messagesBefore: String
+		$messagesAfter: String
+		$messagesFirst: Int
+		$messagesLast: Int
+	) {
+		chatroomMemberships(
+			before: $before
+			after: $after
+			first: $first
+			last: $last
+			user_Username: $user_Username
+			user_Username_Icontains: $user_Username_Icontains
+			user_Username_Istartswith: $user_Username_Istartswith
+			chatroom_Name: $chatroom_Name
+			chatroom_Name_Icontains: $chatroom_Name_Icontains
+			chatroom_Name_Istartswith: $chatroom_Name_Istartswith
+		) {
+			edges {
+				node {
+					uniqueIdentifier
+					chatroom {
+						uniqueIdentifier
+						name
+						messages(
+							before: $messagesBefore
+							after: $messagesAfter
+							first: $messagesFirst
+							last: $messagesLast
+						) {
+							edges {
+								node {
+									sender {
+										nickname
+										user {
+											username
+										}
+									}
+									message
+								}
+							}
+						}
+					}
 				}
 			}
 		}

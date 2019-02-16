@@ -1,4 +1,5 @@
 import graphene
+from datetime import datetime
 
 from .queries import ChatroomMembershipNode
 from ..models import ChatroomMembership as ChatroomMembershipModel
@@ -18,10 +19,13 @@ class ChatroomMembershipSubscriptions(BaseSubscription):
 
     @staticmethod
     def publish(payload, info):
-        chatroom_member_id = payload.get('chatroom_member_id')
+        chatroom_membership_id = payload.get('chatroom_membership_id')
 
         mutation_type = payload.get('type')
         chatroom_membership = ChatroomMembershipModel.objects.get(
-            unique_identifier=chatroom_member_id)
+            unique_identifier=chatroom_membership_id)
+
+        chatroom_membership.updated_at = datetime.now()
+        chatroom_membership.save()
 
         return ChatroomMembershipSubscriptions(mutation_type=mutation_type, chatroom_membership=chatroom_membership)
