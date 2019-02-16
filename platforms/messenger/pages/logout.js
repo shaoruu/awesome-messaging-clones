@@ -8,7 +8,6 @@ class Logout extends Component {
 			<ApolloConsumer>
 				{client => {
 					if (process.browser) {
-						console.log(client)
 						signout(client)
 						redirect({}, '/login')
 					}

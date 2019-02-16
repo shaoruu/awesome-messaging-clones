@@ -7,16 +7,19 @@ import {
 } from '../../../../lib/graphql'
 import Chatroom from './Chatroom/Chatroom'
 
+let subscribed = {}
+
 export default class Chatrooms extends Component {
 	_subscribeToNewChatroomMemberships = subscribeToMore => {
-		subscribeToMore({
+		subscribed[this.props.username] = subscribeToMore({
 			document: CHATROOM_MEMBERSHIP_SUBSCRIPTIONS,
 			variables: {
-				last: 50,
 				messagesLast: 1,
-				user_Username: this.props.username
+				username: this.props.username
 			},
 			updateQuery: (prev, { subscriptionData }) => {
+				console.log('yo wtf')
+
 				if (!subscriptionData.data) return prev
 
 				const {
@@ -40,7 +43,6 @@ export default class Chatrooms extends Component {
 								chatroomMembership.uniqueIdentifier
 						)
 						prev.chatroomMemberships.edges.unshift(alteredChatroomMembership)
-						console.log(chatroomMembership)
 						return prev
 					case 'DELETE':
 						return prev.chatroomMemberships.edges.filter(
@@ -54,7 +56,6 @@ export default class Chatrooms extends Component {
 			}
 		})
 	}
-
 	render() {
 		return (
 			<div>
@@ -62,7 +63,8 @@ export default class Chatrooms extends Component {
 					query={CHATROOM_MEMBERSHIPS_QUERY}
 					variables={{
 						messagesLast: 1,
-						last: 50
+						last: 50,
+						user_Username: this.props.username
 					}}>
 					{({ loading, error, data, subscribeToMore }) => {
 						// TODO: Create a loading indication
@@ -72,7 +74,7 @@ export default class Chatrooms extends Component {
 							return <div>Error</div>
 						}
 
-						if (process.browser)
+						if (!subscribed[this.props.username] && process.browser)
 							this._subscribeToNewChatroomMemberships(subscribeToMore)
 
 						const { edges: chatrooms } = data.chatroomMemberships

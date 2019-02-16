@@ -72,8 +72,9 @@ export const CHATROOM_MEMBERSHIP_SUBSCRIPTIONS = gql`
 		$messagesAfter: String
 		$messagesFirst: Int
 		$messagesLast: Int
+		$username: String!
 	) {
-		chatroomMembershipSubscriptions {
+		chatroomMembershipSubscriptions(username: $username) {
 			mutationType
 			chatroomMembership {
 				uniqueIdentifier

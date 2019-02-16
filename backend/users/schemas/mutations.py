@@ -47,8 +47,11 @@ class Register(relay.ClientIDMutation):
 
 
 class Login(graphql_jwt.relay.JSONWebTokenMutation):
+    user = graphene.Field(UserNode)
 
     def resolve(self, info):
+
+        login(info.context, info.context.user)
 
         UserSubscriptions.broadcast(
             group='users-subscription',
@@ -58,7 +61,7 @@ class Login(graphql_jwt.relay.JSONWebTokenMutation):
             }
         )
 
-        return Login()
+        return Login(user=info.context.user)
 
 
 # No need for logout.

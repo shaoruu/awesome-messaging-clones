@@ -25,13 +25,13 @@ class CreateMessage(relay.ClientIDMutation):
         chatroom = ChatroomModel.objects.get(
             unique_identifier=input.pop('chatroom_id'))
         sent_user = info.context.user
-        chatroom_member = ChatroomMembershipModel.objects.get(
+        chatroom_membership = ChatroomMembershipModel.objects.get(
             chatroom=chatroom, user=sent_user)
 
         input = clean_input(input)
 
         new_message = MessageModel(message=input.get(
-            'message'), sender=chatroom_member, chatroom=chatroom)
+            'message'), sender=chatroom_membership, chatroom=chatroom)
         new_message.save()
 
         MessageSubscriptions.broadcast(
@@ -42,14 +42,16 @@ class CreateMessage(relay.ClientIDMutation):
             }
         )
 
-        ChatroomMembershipSubscriptions.broadcast(
-            group='{}-chatroom-membership-subscription'.format(
-                sent_user.username),
-            payload={
-                "type": MutationTypes.UPDATE.name,
-                "chatroom_membership_id": chatroom_member.unique_identifier
-            }
-        )
+        for membership in ChatroomMembershipModel.objects.filter(chatroom__unique_identifier=chatroom.unique_identifier):
+            ChatroomMembershipSubscriptions.broadcast(
+                group='{}-chatroom-membership-subscription'.format(
+                    membership.user.username),
+                payload={
+                    "type": MutationTypes.UPDATE.name,
+                    "chatroom_membership_id": membership.unique_identifier
+                }
+
+            )
 
         return CreateMessage(message=new_message)
 

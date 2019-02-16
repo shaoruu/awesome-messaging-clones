@@ -5,7 +5,11 @@ import { CREATE_MESSAGE_MUTATION } from '../../../../lib/graphql'
 import { withStyles } from '@material-ui/core'
 
 class MessageInputField extends Component {
-	state = { message: '' }
+	constructor(props) {
+		super(props)
+
+		this.state = { message: '' }
+	}
 
 	handleChange = event => {
 		this.setState({ message: event.target.value })
@@ -20,6 +24,7 @@ class MessageInputField extends Component {
 					message: this.state.message
 				}
 			})
+			this.setState({ message: '' })
 		}
 	}
 

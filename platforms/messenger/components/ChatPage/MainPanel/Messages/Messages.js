@@ -4,8 +4,11 @@ import { Query } from 'react-apollo'
 import { MESSAGES_QUERY, MESSAGE_SUBSCRIPTIONS } from '../../../../lib/graphql'
 import Message from './Message/Message'
 
+let subscribed = {}
+
 export default class Messages extends Component {
 	_subscribeToNewMessages = subscribeToMore => {
+		subscribed[this.props.chatroomId] = true
 		subscribeToMore({
 			document: MESSAGE_SUBSCRIPTIONS,
 			variables: {
@@ -62,7 +65,8 @@ export default class Messages extends Component {
 							return <div>Error</div>
 						}
 
-						if (process.browser) this._subscribeToNewMessages(subscribeToMore)
+						if (!subscribed[this.props.chatroomId] && process.browser)
+							this._subscribeToNewMessages(subscribeToMore)
 
 						const { edges: messages } = data.messages
 

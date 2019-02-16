@@ -8,7 +8,6 @@ import MessageInputField from './MessageInputField/MessageInputField'
 class MainPanel extends Component {
 	render() {
 		if (!this.props.chatroomId) return <h1>SHIT</h1>
-		console.log(this.props.chatroomId)
 		return (
 			<div className={this.props.className}>
 				<Messages chatroomId={this.props.chatroomId} />

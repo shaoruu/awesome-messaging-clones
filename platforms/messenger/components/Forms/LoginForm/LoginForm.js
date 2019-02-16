@@ -15,7 +15,7 @@ import Logo from '../../Logo/Logo'
 
 class LoginForm extends Component {
 	state = {
-		keepMeLoggedIn: false
+		keepMeLoggedIn: true
 	}
 
 	handleChecked = () => {

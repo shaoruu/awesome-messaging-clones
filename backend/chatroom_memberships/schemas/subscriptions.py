@@ -1,4 +1,5 @@
 import graphene
+from graphql import GraphQLError
 from datetime import datetime
 
 from .queries import ChatroomMembershipNode
@@ -8,17 +9,20 @@ from backend.graphql_ws import BaseSubscription
 
 class ChatroomMembershipSubscriptions(BaseSubscription):
 
+    class Arguments:
+        username = graphene.String(
+            required=True, description="Username of the user to listen on")
+
     ' Fields '
     mutation_type = graphene.String()
     chatroom_membership = graphene.Field(ChatroomMembershipNode)
 
     @staticmethod
-    def subscribe(root, info):
-        me = info.context.user
-        return ['{}-chatroom-membership-subscription'.format(me.username)]
+    def subscribe(root, info, username):
+        return ['{}-chatroom-membership-subscription'.format(username)]
 
     @staticmethod
-    def publish(payload, info):
+    def publish(payload, info, username):
         chatroom_membership_id = payload.get('chatroom_membership_id')
 
         mutation_type = payload.get('type')
