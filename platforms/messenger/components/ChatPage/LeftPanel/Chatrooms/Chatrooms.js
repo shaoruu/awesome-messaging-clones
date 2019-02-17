@@ -18,8 +18,6 @@ export default class Chatrooms extends Component {
 				username: this.props.username
 			},
 			updateQuery: (prev, { subscriptionData }) => {
-				console.log('yo wtf')
-
 				if (!subscriptionData.data) return prev
 
 				const {

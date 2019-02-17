@@ -32,35 +32,23 @@ export const MESSAGE_SUBSCRIPTIONS = gql`
 `
 
 export const CHATROOM_SUBSCRIPTIONS = gql`
-	subscription ChatroomSubscriptions(
-		$messagesBefore: String
-		$messagesAfter: String
-		$messagesFirst: Int
-		$messagesLast: Int
-	) {
-		chatroomSubscriptions {
+	subscription ChatroomSubscriptions($chatroomId: String!) {
+		chatroomSubscriptions(chatroomId: $chatroomId) {
 			mutationType
 			chatroom {
-				uniqueIdentifier
-				name
-				messages(
-					before: $messagesBefore
-					after: $messagesAfter
-					first: $messagesFirst
-					last: $messagesLast
-				) {
+				memberships {
 					edges {
 						node {
-							sender {
-								nickname
-								user {
-									username
-								}
+							user {
+								uniqueIdentifier
+								username
 							}
-							message
+							nickname
+							isAdmin
 						}
 					}
 				}
+				name
 			}
 		}
 	}

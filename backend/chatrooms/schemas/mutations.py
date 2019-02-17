@@ -32,14 +32,15 @@ class CreateChatroom(relay.ClientIDMutation):
             chatroom=new_chatroom, user=info.context.user)
         chatroom_membership.save()
 
-        ChatroomSubscriptions.broadcast(
-            group='{}-chatroom-subscription'.format(
-                info.context.user.username),
-            payload={
-                "type": MutationTypes.CREATE.name,
-                "chatroom_id": new_chatroom.unique_identifier
-            }
-        )
+        # No need to broadcase chatroom subscription since chatroom_membership handles subscription
+        # ChatroomSubscriptions.broadcast(
+        #     group='{}-chatroom-subscription'.format(
+        #         info.context.user.username),
+        #     payload={
+        #         "type": MutationTypes.CREATE.name,
+        #         "chatroom_id": new_chatroom.unique_identifier
+        #     }
+        # )
 
         ChatroomMembershipSubscriptions.broadcast(
             group='{}-chatroom-membership-subscription'.format(
@@ -74,12 +75,22 @@ class UpdateChatroom(relay.ClientIDMutation):
 
         ChatroomSubscriptions.broadcast(
             group='{}-chatroom-subscription'.format(
-                info.context.user.username),
+                chatroom.unique_identifier),
             payload={
                 "type": MutationTypes.UPDATE.name,
                 "chatroom_id": chatroom.unique_identifier
             }
         )
+
+        for membership in ChatroomMembershipModel.objects.filter(chatroom=chatroom):
+            ChatroomMembershipSubscriptions.broadcast(
+                group='{}-chatroom-membership-subscription'.format(
+                    membership.user.username),
+                payload={
+                    "type": MutationTypes.UPDATE.name,
+                    "chatroom_membership_id": membership.unique_identifier
+                }
+            )
 
         return UpdateChatroom(chatroom=chatroom)
 
@@ -96,14 +107,15 @@ class DeleteChatroom(relay.ClientIDMutation):
         chatroom = ChatroomModel.objects.get(
             unique_identifier=input.get('chatroom_id'))
 
-        ChatroomSubscriptions.broadcast(
-            group='{}-chatroom-subscription'.format(
-                info.context.user.username),
-            payload={
-                "type": MutationTypes.DELETE.name,
-                "chatroom_id": input.get('chatroom_id')
-            }
-        )
+        for membership in ChatroomMembershipModel.objects.filter(chatroom=chatroom):
+            ChatroomMembershipSubscriptions.broadcast(
+                group='{}-chatroom-membership-subscription'.format(
+                    membership.user.username),
+                payload={
+                    "type": MutationTypes.DELETE.name,
+                    "chatroom_membership_id": membership.unique_identifier
+                }
+            )
 
         chatroom.delete()
 

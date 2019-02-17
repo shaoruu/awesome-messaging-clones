@@ -17,8 +17,8 @@ if (!process.browser) {
 
 function create(initialState, { getToken }) {
 	const httpLink = createHttpLink({
-		uri: GQL_BACKEND_URI,
-		credentials: 'same-origin'
+		uri: GQL_BACKEND_URI
+		// credentials: 'same-origin'
 	})
 
 	// Check out https://github.com/apollographql/subscriptions-transport-ws/issues/333 to see why I used process.browser

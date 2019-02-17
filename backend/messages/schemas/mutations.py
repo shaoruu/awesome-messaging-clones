@@ -50,7 +50,6 @@ class CreateMessage(relay.ClientIDMutation):
                     "type": MutationTypes.UPDATE.name,
                     "chatroom_membership_id": membership.unique_identifier
                 }
-
             )
 
         return CreateMessage(message=new_message)

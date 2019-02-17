@@ -17,6 +17,8 @@ export default class Messages extends Component {
 			updateQuery: (prev, { subscriptionData }) => {
 				if (!subscriptionData.data) return prev
 
+				console.log('hi')
+
 				const {
 					mutationType,
 					message

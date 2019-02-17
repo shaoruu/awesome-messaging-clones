@@ -51,7 +51,7 @@ class Login(graphql_jwt.relay.JSONWebTokenMutation):
 
     def resolve(self, info):
 
-        login(info.context, info.context.user)
+        # login(info.context, info.context.user)
 
         UserSubscriptions.broadcast(
             group='users-subscription',

@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import { withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/core'
-
-import Chatrooms from './Chatrooms/Chatrooms'
-import PanelNavBar from './PanelNavBar/PanelNavBar'
+import ChatroomToolbox from './ChatroomToolbox.js/ChatroomToolbox'
 
 class MainPanel extends Component {
 	render() {
+		if (!this.props.chatroomId) return null
 		return (
 			<div className={this.props.className}>
-				<PanelNavBar />
-				<Chatrooms username={this.props.username} />
+				<ChatroomToolbox chatroomId={this.props.chatroomId} />
 			</div>
 		)
 	}

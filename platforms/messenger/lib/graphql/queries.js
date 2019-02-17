@@ -110,6 +110,18 @@ export const CHATROOM_QUERY = gql`
 	query Chatroom($uniqueIdentifier: String!) {
 		chatroom(uniqueIdentifier: $uniqueIdentifier) {
 			# TODO: add more query returned data field
+			memberships {
+				edges {
+					node {
+						user {
+							uniqueIdentifier
+							username
+						}
+						nickname
+						isAdmin
+					}
+				}
+			}
 			name
 		}
 	}

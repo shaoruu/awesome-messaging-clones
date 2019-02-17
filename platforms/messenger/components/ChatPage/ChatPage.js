@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import MainPanel from './MainPanel/MainPanel'
 import LeftPanel from './LeftPanel/LeftPanel'
 import { withStyles } from '@material-ui/core'
+import RightPanel from './RightPanel/RightPanel'
 
 class ChatPage extends Component {
 	render() {
@@ -14,6 +15,10 @@ class ChatPage extends Component {
 				<MainPanel
 					chatroomId={this.props.chatroomId}
 					className={classes.mainPanel}
+				/>
+				<RightPanel
+					chatroomId={this.props.chatroomId}
+					className={classes.rightPanel}
 				/>
 			</div>
 		)
@@ -33,6 +38,9 @@ const styles = theme => ({
 		border: '1px solid black',
 		display: 'flex',
 		flexDirection: 'column'
+	},
+	rightPanel: {
+		gridColumn: '16/21'
 	}
 })
 
