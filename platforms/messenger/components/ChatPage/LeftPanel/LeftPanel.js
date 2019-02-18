@@ -3,13 +3,13 @@ import { withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/core'
 
 import Chatrooms from './Chatrooms/Chatrooms'
-import PanelNavBar from './PanelNavBar/PanelNavBar'
+import LeftPanelNavBar from './LeftPanelNavBar/LeftPanelNavBar'
 
 class MainPanel extends Component {
 	render() {
 		return (
 			<div className={this.props.className}>
-				<PanelNavBar />
+				<LeftPanelNavBar />
 				<Chatrooms username={this.props.username} />
 			</div>
 		)

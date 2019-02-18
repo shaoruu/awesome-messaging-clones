@@ -7,6 +7,8 @@ import RightPanel from './RightPanel/RightPanel'
 
 class ChatPage extends Component {
 	render() {
+		if (process.browser) document.body.style.overflow = 'hidden'
+
 		const { classes } = this.props
 
 		return (
@@ -14,6 +16,7 @@ class ChatPage extends Component {
 				<LeftPanel className={classes.leftPanel} username={this.props.username} />
 				<MainPanel
 					chatroomId={this.props.chatroomId}
+					username={this.props.username}
 					className={classes.mainPanel}
 				/>
 				<RightPanel
@@ -28,19 +31,30 @@ class ChatPage extends Component {
 const styles = theme => ({
 	root: {
 		display: 'grid',
-		gridTemplateColumns: 'repeat(20, 1fr)'
+		height: '100%',
+		gridTemplateColumns: 'repeat(20, 1fr)',
+		gridTemplateRows: 'repeat(16, 1fr)'
 	},
 	mainPanel: {
-		gridColumn: '6/16'
+		gridColumn: '6/16',
+		gridRow: '2/17',
+		position: 'relative',
+		height: '100%',
+		display: 'grid',
+		gridTemplateRows: 'repeat(16, 1fr)'
 	},
 	leftPanel: {
 		gridColumn: '1/6',
-		border: '1px solid black',
-		display: 'flex',
-		flexDirection: 'column'
+		gridRow: '1/17',
+		height: '100%',
+		borderRight: '1px solid #CCCCCC',
+		position: 'relative',
+		display: 'grid',
+		gridTemplateRows: 'repeat(16, 1fr)'
 	},
 	rightPanel: {
-		gridColumn: '16/21'
+		gridColumn: '16/21',
+		gridRow: '2/5'
 	}
 })
 

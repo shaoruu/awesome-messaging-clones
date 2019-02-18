@@ -10,7 +10,10 @@ class MainPanel extends Component {
 		if (!this.props.chatroomId) return null
 		return (
 			<div className={this.props.className}>
-				<Messages chatroomId={this.props.chatroomId} />
+				<Messages
+					chatroomId={this.props.chatroomId}
+					username={this.props.username}
+				/>
 				<MessageInputField chatroomId={this.props.chatroomId} />
 			</div>
 		)

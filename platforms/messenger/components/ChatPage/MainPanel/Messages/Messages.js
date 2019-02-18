@@ -3,10 +3,12 @@ import { Query } from 'react-apollo'
 
 import { MESSAGES_QUERY, MESSAGE_SUBSCRIPTIONS } from '../../../../lib/graphql'
 import Message from './Message/Message'
+import { withStyles } from '@material-ui/core'
+import { EEXIST } from 'constants'
 
 let subscribed = {}
 
-export default class Messages extends Component {
+class Messages extends Component {
 	_subscribeToNewMessages = subscribeToMore => {
 		subscribed[this.props.chatroomId] = true
 		subscribeToMore({
@@ -31,7 +33,7 @@ export default class Messages extends Component {
 
 				switch (mutationType) {
 					case 'CREATE':
-						prev.messages.edges.push(alteredMessage)
+						prev.messages.edges.unshift(alteredMessage)
 						return prev
 					case 'UPDATE':
 						const index = prev.messages.edges.findIndex(
@@ -50,38 +52,86 @@ export default class Messages extends Component {
 		})
 	}
 
+	componentWillMount() {
+		subscribed = {}
+	}
+
 	render() {
+		const { classes, username } = this.props
+
 		return (
-			<div>
-				<Query
-					query={MESSAGES_QUERY}
-					variables={{
-						last: 50,
-						chatroom_UniqueIdentifier: this.props.chatroomId
-					}}>
-					{({ loading, error, data, subscribeToMore }) => {
-						// TODO: Create a loading indication
-						if (loading) return <div>Fetching</div>
-						if (error) {
-							console.log(error)
-							return <div>Error</div>
-						}
+			<Query
+				query={MESSAGES_QUERY}
+				variables={{
+					last: 50,
+					chatroom_UniqueIdentifier: this.props.chatroomId
+				}}>
+				{({ loading, error, data, subscribeToMore }) => {
+					// TODO: Create a loading indication
+					if (loading) return <div>Fetching</div>
+					if (error) {
+						console.log(error)
+						return <div>Error</div>
+					}
 
-						if (!subscribed[this.props.chatroomId] && process.browser)
-							this._subscribeToNewMessages(subscribeToMore)
+					if (!subscribed[this.props.chatroomId] && process.browser)
+						this._subscribeToNewMessages(subscribeToMore)
 
-						const { edges: messages } = data.messages
+					const { edges: messages } = data.messages
 
-						return (
-							<ul>
-								{messages.map((ele, index) => (
-									<Message key={index} data={ele.node} />
-								))}
-							</ul>
-						)
-					}}
-				</Query>
-			</div>
+					return (
+						<ul className={classes.messagesWrapper}>
+							{messages.map((ele, index) => {
+								let specialStyle = []
+								const { username: sender } = ele.node.sender.user
+
+								if (index === 0) specialStyle.push('first')
+								if (
+									index !== 0 &&
+									sender !==
+										messages[index - 1].node.sender.user.username
+								)
+									specialStyle.push('first')
+								if (
+									index !== messages.length - 1 &&
+									sender !==
+										messages[index + 1].node.sender.user.username
+								)
+									specialStyle.push('last')
+								if (index === messages.length - 1)
+									specialStyle.push('last')
+
+								return (
+									<Message
+										key={index}
+										data={ele.node}
+										username={username}
+										specialStyle={specialStyle}
+									/>
+								)
+							})}
+						</ul>
+					)
+				}}
+			</Query>
 		)
 	}
 }
+
+const styles = theme => ({
+	messagesWrapper: {
+		listStyle: 'none',
+		display: 'flex',
+		flexDirection: 'column-reverse',
+		justifyContent: 'flex-start',
+		alignItems: 'flex-start',
+		height: '100%',
+		gridRow: '1/16',
+		overflowY: 'scroll',
+
+		borderBottom: '1px solid #CCCCCC',
+		borderLeft: '1px solid #CCCCCC'
+	}
+})
+
+export default withStyles(styles)(Messages)

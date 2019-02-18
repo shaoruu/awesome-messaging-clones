@@ -34,22 +34,28 @@ class MessageInputField extends Component {
 		return (
 			<Mutation mutation={CREATE_MESSAGE_MUTATION}>
 				{createMessage => (
-					<>
+					<div className={classes.navRoot}>
 						<input
 							id="message"
 							name="message"
 							type="text"
+							autoComplete="off"
+							autoFocus={true}
 							value={this.state.message}
 							onChange={this.handleChange}
+							placeholder="Type a message..."
 							onKeyUp={e => this.handleKeyUp(e, createMessage, chatroomId)}
+							className={classes.inputField}
 						/>
-						<button
-							type="submit"
-							disabled={!this.state.message}
-							className={classes.sendButton}>
-							Send
-						</button>
-					</>
+						<div className={classes.buttons}>
+							<button
+								type="submit"
+								disabled={!this.state.message}
+								className={classes.sendButton}>
+								Send
+							</button>
+						</div>
+					</div>
 				)}
 			</Mutation>
 		)
@@ -57,10 +63,51 @@ class MessageInputField extends Component {
 }
 
 const styles = theme => ({
+	navRoot: {
+		width: '100%',
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		gridRow: '16/17',
+		borderTop: '1px solid #CCCCCC',
+		borderRight: '1px solid #CCCCCC',
+		verticalAlign: 'middle'
+	},
 	sendButton: {
+		fontSize: 14,
+		fontWeight: 550,
+		color: '#0084ff',
+		// padding: 5,
+		background: 'transparent',
+		border: 'none',
 		'&:disabled': {
-			color: 'red'
+			color: 'gray'
 		}
+	},
+	inputField: {
+		border: 'none',
+		background: 'transparent',
+		flex: '0 0 80%',
+		fontSize: 14,
+		padding: 5,
+		marginLeft: 10,
+		height: '100%',
+		'&:focus': {
+			outline: 'none'
+		},
+		'&::placeholder': {
+			color: 'rgba(0, 0, 0, 0.2)'
+		}
+	},
+	buttons: {
+		boxSizing: 'border-box',
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignItems: 'center',
+		margin: '0 15px',
+		width: '100%'
 	}
 })
 

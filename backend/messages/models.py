@@ -24,7 +24,7 @@ class Message(models.Model):
     REQUIRED_FIELDS = ['message', 'sender', 'chatroom']
 
     class Meta:
-        ordering = ['sent_at']
+        ordering = ['-sent_at']
 
     def __str__(self):
         return "{0}: {1}".format(self.sender.user.username, self.message)

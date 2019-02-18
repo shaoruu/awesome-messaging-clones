@@ -6,10 +6,11 @@ import {
 	CHATROOM_MEMBERSHIP_SUBSCRIPTIONS
 } from '../../../../lib/graphql'
 import Chatroom from './Chatroom/Chatroom'
+import { withStyles } from '@material-ui/core'
 
 let subscribed = {}
 
-export default class Chatrooms extends Component {
+class Chatrooms extends Component {
 	_subscribeToNewChatroomMemberships = subscribeToMore => {
 		subscribed[this.props.username] = subscribeToMore({
 			document: CHATROOM_MEMBERSHIP_SUBSCRIPTIONS,
@@ -54,44 +55,65 @@ export default class Chatrooms extends Component {
 			}
 		})
 	}
+
+	componentWillMount() {
+		subscribed = {}
+	}
+
 	render() {
+		const { classes } = this.props
 		return (
-			<div>
-				<Query
-					query={CHATROOM_MEMBERSHIPS_QUERY}
-					variables={{
-						messagesLast: 1,
-						last: 50,
-						user_Username: this.props.username
-					}}>
-					{({ loading, error, data, subscribeToMore }) => {
-						// TODO: Create a loading indication
-						if (loading) return <div>Fetching</div>
-						if (error) {
-							console.log(error)
-							return <div>Error</div>
-						}
+			<Query
+				query={CHATROOM_MEMBERSHIPS_QUERY}
+				variables={{
+					messagesLast: 1,
+					last: 50,
+					user_Username: this.props.username
+				}}>
+				{({ loading, error, data, subscribeToMore }) => {
+					// TODO: Create a loading indication
+					if (loading) return <div>Fetching</div>
+					if (error) {
+						console.log(error)
+						return <div>Error</div>
+					}
 
-						if (!subscribed[this.props.username] && process.browser)
-							this._subscribeToNewChatroomMemberships(subscribeToMore)
+					if (!subscribed[this.props.username] && process.browser)
+						this._subscribeToNewChatroomMemberships(subscribeToMore)
 
-						const { edges: chatrooms } = data.chatroomMemberships
+					const { edges: chatrooms } = data.chatroomMemberships
 
-						// TODO: Add a "no messages" component
-						if (!chatrooms) return null
+					// TODO: Add a "no messages" component
+					if (!chatrooms) return null
 
-						return (
-							<div>
-								<ul>
-									{chatrooms.map((ele, index) => (
-										<Chatroom key={index} data={ele.node} />
-									))}
-								</ul>
-							</div>
-						)
-					}}
-				</Query>
-			</div>
+					return (
+						<ul className={classes.chatroomsList}>
+							{chatrooms.map((ele, index) => (
+								<Chatroom
+									key={index}
+									data={ele.node}
+									username={this.props.username}
+								/>
+							))}
+						</ul>
+					)
+				}}
+			</Query>
 		)
 	}
 }
+
+const styles = themes => ({
+	chatroomsList: {
+		height: '100%',
+		width: '100%',
+		gridRow: '2/17',
+		borderTop: '1px solid #CCCCCC',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
+		overflow: 'scroll'
+	}
+})
+
+export default withStyles(styles)(Chatrooms)
