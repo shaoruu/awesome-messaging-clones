@@ -1,14 +1,15 @@
 import { withStyles } from '@material-ui/core'
 
 const Message = props => {
-	const { classes, username: meUsername, specialStyle } = props
+	const { classes, username: meUsername, specialStyle, chatroomId } = props
 
 	const {
 		message,
 		sender: {
 			nickname,
 			user: { username }
-		}
+		},
+		sentAt
 	} = props.data
 
 	const senderName = nickname ? nickname : username
@@ -20,11 +21,11 @@ const Message = props => {
 	let cornerRadiuses = ['5px', '25px', '25px', '5px']
 	if (specialStyle.includes('first')) {
 		cornerRadiuses[3] = '25px'
-		specials['marginTop'] = 10
+		specials['marginBottom'] = 10
 	}
 	if (specialStyle.includes('last')) {
 		cornerRadiuses[0] = '25px'
-		specials['marginBottom'] = 10
+		specials['marginTop'] = 10
 	}
 
 	if (isMe) {
@@ -70,8 +71,13 @@ const styles = theme => ({
 		display: 'inline-block',
 		fontSize: 14,
 		fontWeight: 400,
+		maxWidth: 400,
+		overflowWrap: 'break-word',
+		wordWrap: 'breakWord',
+		hyphens: 'auto',
+
 		color: '#eeeeee',
-		padding: 8,
+		padding: '8px 12px',
 		margin: '2px 10px 0 0'
 	}
 })

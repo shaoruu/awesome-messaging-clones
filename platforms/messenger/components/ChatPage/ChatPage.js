@@ -11,14 +11,15 @@ class ChatPage extends Component {
 
 		const { classes } = this.props
 
+		const commonProps = {
+			chatroomId: this.props.chatroomId,
+			username: this.props.username
+		}
+
 		return (
 			<div className={classes.root}>
-				<LeftPanel className={classes.leftPanel} username={this.props.username} />
-				<MainPanel
-					chatroomId={this.props.chatroomId}
-					username={this.props.username}
-					className={classes.mainPanel}
-				/>
+				<LeftPanel className={classes.leftPanel} {...commonProps} />
+				<MainPanel className={classes.mainPanel} {...commonProps} />
 				<RightPanel
 					chatroomId={this.props.chatroomId}
 					className={classes.rightPanel}

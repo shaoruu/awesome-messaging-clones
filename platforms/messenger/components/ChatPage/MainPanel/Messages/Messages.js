@@ -3,8 +3,7 @@ import { Query } from 'react-apollo'
 
 import { MESSAGES_QUERY, MESSAGE_SUBSCRIPTIONS } from '../../../../lib/graphql'
 import Message from './Message/Message'
-import { withStyles } from '@material-ui/core'
-import { EEXIST } from 'constants'
+import { withStyles, CircularProgress } from '@material-ui/core'
 
 let subscribed = {}
 
@@ -19,8 +18,6 @@ class Messages extends Component {
 			updateQuery: (prev, { subscriptionData }) => {
 				if (!subscriptionData.data) return prev
 
-				console.log('hi')
-
 				const {
 					mutationType,
 					message
@@ -30,6 +27,13 @@ class Messages extends Component {
 					node: message,
 					__typename: 'MessageNodeEdge'
 				}
+
+				if (!prev)
+					return {
+						messages: {
+							edges: [alteredMessage]
+						}
+					}
 
 				switch (mutationType) {
 					case 'CREATE':
@@ -60,65 +64,81 @@ class Messages extends Component {
 		const { classes, username } = this.props
 
 		return (
-			<Query
-				query={MESSAGES_QUERY}
-				variables={{
-					last: 50,
-					chatroom_UniqueIdentifier: this.props.chatroomId
-				}}>
-				{({ loading, error, data, subscribeToMore }) => {
-					// TODO: Create a loading indication
-					if (loading) return <div>Fetching</div>
-					if (error) {
-						console.log(error)
-						return <div>Error</div>
-					}
-
-					if (!subscribed[this.props.chatroomId] && process.browser)
-						this._subscribeToNewMessages(subscribeToMore)
-
-					const { edges: messages } = data.messages
-
-					return (
-						<ul className={classes.messagesWrapper}>
-							{messages.map((ele, index) => {
-								let specialStyle = []
-								const { username: sender } = ele.node.sender.user
-
-								if (index === 0) specialStyle.push('first')
-								if (
-									index !== 0 &&
-									sender !==
-										messages[index - 1].node.sender.user.username
-								)
-									specialStyle.push('first')
-								if (
-									index !== messages.length - 1 &&
-									sender !==
-										messages[index + 1].node.sender.user.username
-								)
-									specialStyle.push('last')
-								if (index === messages.length - 1)
-									specialStyle.push('last')
-
-								return (
-									<Message
-										key={index}
-										data={ele.node}
-										username={username}
-										specialStyle={specialStyle}
+			<div className={classes.root}>
+				<Query
+					query={MESSAGES_QUERY}
+					variables={{
+						first: 50,
+						chatroom_UniqueIdentifier: this.props.chatroomId
+					}}>
+					{({ loading, error, data, subscribeToMore }) => {
+						// TODO: Create a loading indication
+						if (loading)
+							return (
+								<div className={classes.progressBarWrapper}>
+									<CircularProgress
+										size={30}
+										thickness={5}
+										className={classes.progressBar}
 									/>
-								)
-							})}
-						</ul>
-					)
-				}}
-			</Query>
+								</div>
+							)
+						if (error) {
+							console.log(error)
+							return <div>Error</div>
+						}
+
+						if (!subscribed[this.props.chatroomId] && process.browser)
+							this._subscribeToNewMessages(subscribeToMore)
+
+						const { edges: messages } = data.messages
+
+						return (
+							<ul className={classes.messagesWrapper}>
+								{messages.map((ele, index) => {
+									let specialStyle = []
+									const { username: sender } = ele.node.sender.user
+
+									if (index === 0) specialStyle.push('first')
+									if (
+										index !== 0 &&
+										sender !==
+											messages[index - 1].node.sender.user.username
+									)
+										specialStyle.push('first')
+									if (
+										index !== messages.length - 1 &&
+										sender !==
+											messages[index + 1].node.sender.user.username
+									)
+										specialStyle.push('last')
+									if (index === messages.length - 1)
+										specialStyle.push('last')
+
+									return (
+										<Message
+											key={index}
+											data={ele.node}
+											username={username}
+											specialStyle={specialStyle}
+										/>
+									)
+								})}
+							</ul>
+						)
+					}}
+				</Query>
+			</div>
 		)
 	}
 }
 
 const styles = theme => ({
+	root: {
+		gridRow: '1/16',
+		borderRight: '1px solid #CCCCCC',
+		borderTop: '1px solid #CCCCCC'
+	},
 	messagesWrapper: {
 		listStyle: 'none',
 		display: 'flex',
@@ -126,11 +146,18 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
 		height: '100%',
-		gridRow: '1/16',
 		overflowY: 'scroll',
-
-		borderBottom: '1px solid #CCCCCC',
-		borderLeft: '1px solid #CCCCCC'
+		paddingBottom: 10
+	},
+	progressBarWrapper: {
+		gridRow: '1/16',
+		padding: 'auto',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	progressBar: {
+		color: '#7abfff'
 	}
 })
 

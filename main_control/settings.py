@@ -157,3 +157,6 @@ CHANNEL_LAYERS = {
 GRAPHQL_JWT = {
     'JWT_ALLOW_ARGUMENT': True,
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

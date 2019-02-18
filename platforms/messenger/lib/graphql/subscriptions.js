@@ -23,9 +23,11 @@ export const MESSAGE_SUBSCRIPTIONS = gql`
 				sender {
 					nickname
 					user {
+						image
 						username
 					}
 				}
+				sentAt
 			}
 		}
 	}
@@ -80,10 +82,12 @@ export const CHATROOM_MEMBERSHIP_SUBSCRIPTIONS = gql`
 								sender {
 									nickname
 									user {
+										image
 										username
 									}
 								}
 								message
+								sentAt
 							}
 						}
 					}

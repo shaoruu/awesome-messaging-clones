@@ -15,7 +15,7 @@ class Chatrooms extends Component {
 		subscribed[this.props.username] = subscribeToMore({
 			document: CHATROOM_MEMBERSHIP_SUBSCRIPTIONS,
 			variables: {
-				messagesLast: 1,
+				messagesFirst: 1,
 				username: this.props.username
 			},
 			updateQuery: (prev, { subscriptionData }) => {
@@ -30,6 +30,13 @@ class Chatrooms extends Component {
 					node: chatroomMembership,
 					__typename: 'ChatroomMembershipNodeConnection'
 				}
+
+				if (!prev)
+					return {
+						chatroomMemberships: {
+							edges: [alteredChatroomMembership]
+						}
+					}
 
 				switch (mutationType) {
 					case 'CREATE':
@@ -61,13 +68,13 @@ class Chatrooms extends Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { classes, chatroomId } = this.props
 		return (
 			<Query
 				query={CHATROOM_MEMBERSHIPS_QUERY}
 				variables={{
-					messagesLast: 1,
-					last: 50,
+					messagesFirst: 1,
+					first: 50,
 					user_Username: this.props.username
 				}}>
 				{({ loading, error, data, subscribeToMore }) => {
@@ -93,6 +100,7 @@ class Chatrooms extends Component {
 									key={index}
 									data={ele.node}
 									username={this.props.username}
+									chatroomId={chatroomId}
 								/>
 							))}
 						</ul>

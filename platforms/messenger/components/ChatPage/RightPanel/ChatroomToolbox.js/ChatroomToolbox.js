@@ -41,6 +41,9 @@ export default class ChatroomToolbox extends Component {
 					chatroom
 				} = subscriptionData.data.chatroomSubscriptions
 
+				console.log('chatroom')
+				console.log(chatroom)
+
 				switch (mutationType) {
 					case 'CREATE':
 						break

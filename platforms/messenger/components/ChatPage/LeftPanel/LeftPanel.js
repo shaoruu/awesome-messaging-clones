@@ -10,7 +10,10 @@ class MainPanel extends Component {
 		return (
 			<div className={this.props.className}>
 				<LeftPanelNavBar />
-				<Chatrooms username={this.props.username} />
+				<Chatrooms
+					username={this.props.username}
+					chatroomId={this.props.chatroomId}
+				/>
 			</div>
 		)
 	}

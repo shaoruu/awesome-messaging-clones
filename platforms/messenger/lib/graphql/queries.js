@@ -97,9 +97,11 @@ export const MESSAGES_QUERY = gql`
 					sender {
 						nickname
 						user {
+							image
 							username
 						}
 					}
+					sentAt
 				}
 			}
 		}
@@ -213,10 +215,12 @@ export const CHATROOM_MEMBERSHIPS_QUERY = gql`
 									sender {
 										nickname
 										user {
+											image
 											username
 										}
 									}
 									message
+									sentAt
 								}
 							}
 						}

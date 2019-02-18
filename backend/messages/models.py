@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import datetime
 
 from backend.utils import id_generator
 from backend.chatrooms.models import Chatroom
@@ -18,7 +19,7 @@ class Message(models.Model):
         Chatroom, related_name="messages", on_delete=models.CASCADE)
 
     ' Timestamps '
-    sent_at = models.DateTimeField(default=timezone.now)
+    sent_at = models.DateTimeField(default=datetime.now)
     edited_at = models.DateTimeField(auto_now_add=True)
 
     REQUIRED_FIELDS = ['message', 'sender', 'chatroom']

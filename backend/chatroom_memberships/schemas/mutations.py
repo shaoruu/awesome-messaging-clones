@@ -3,6 +3,7 @@ from graphene import relay
 from graphql import GraphQLError
 
 from backend.chatrooms.models import Chatroom as ChatroomModel
+from backend.chatrooms.schemas.subscriptions import ChatroomSubscriptions
 from backend.users.models import User as UserModel
 from backend.enums import MutationTypes
 from ..models import ChatroomMembership as ChatroomMembershipModel
@@ -41,6 +42,15 @@ class CreateChatroomMembership(relay.ClientIDMutation):
             payload={
                 "type": MutationTypes.CREATE.name,
                 "chatroom_membership_id": new_chatroom_membership.unique_identifier
+            }
+        )
+
+        ChatroomSubscriptions.broadcast(
+            group='{}-chatroom-subscription'.format(
+                chatroom.unique_identifier),
+            payload={
+                "type": MutationTypes.UPDATE.name,
+                "chatroom_id": chatroom.unique_identifier
             }
         )
 

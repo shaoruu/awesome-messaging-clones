@@ -17,7 +17,7 @@ class MessageInputField extends Component {
 
 	handleKeyUp = (event, createMessage, chatroomId) => {
 		event.preventDefault()
-		if (event.keyCode === 13) {
+		if (event.keyCode === 13 && !event.shiftKey) {
 			createMessage({
 				variables: {
 					chatroomId: chatroomId,
@@ -26,6 +26,10 @@ class MessageInputField extends Component {
 			})
 			this.setState({ message: '' })
 		}
+	}
+
+	componentDidUpdate() {
+		this.input.focus()
 	}
 
 	render() {
@@ -40,12 +44,12 @@ class MessageInputField extends Component {
 							name="message"
 							type="text"
 							autoComplete="off"
-							autoFocus={true}
 							value={this.state.message}
 							onChange={this.handleChange}
 							placeholder="Type a message..."
 							onKeyUp={e => this.handleKeyUp(e, createMessage, chatroomId)}
 							className={classes.inputField}
+							ref={node => (this.input = node)}
 						/>
 						<div className={classes.buttons}>
 							<button
