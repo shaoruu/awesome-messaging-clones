@@ -103,7 +103,6 @@ class Messages extends Component {
 
 const styles = theme => ({
 	root: {
-		gridRow: '1/16',
 		borderRight: '1px solid #CCCCCC',
 		display: 'flex',
 		flexDirection: 'column-reverse',
@@ -115,7 +114,7 @@ const styles = theme => ({
 	},
 	progressBarWrapper: {
 		gridRow: '1/16',
-		height: '100%',
+		width: '100%',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center'

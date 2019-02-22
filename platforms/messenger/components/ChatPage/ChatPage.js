@@ -46,8 +46,9 @@ const styles = theme => ({
 		gridRow: '2/17',
 		position: 'relative',
 		height: '100%',
-		display: 'grid',
-		gridTemplateRows: 'repeat(16, 1fr)'
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'stetch'
 	},
 	topPanel: {
 		gridColumn: '6/21',

@@ -36,6 +36,7 @@
 		"react-apollo": "^2.4.1",
 		"react-dom": "^16.8.1",
 		"react-jss": "^8.6.1",
+		"react-textarea-autosize": "^7.1.0",
 		"styled-jsx": "^3.2.1",
 		"subscriptions-transport-ws": "^0.9.15",
 		"yup": "^0.26.10"

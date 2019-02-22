@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
+import TextareaAutosize from 'react-textarea-autosize'
 
 import { CREATE_MESSAGE_MUTATION } from '../../../../lib/graphql'
 import { withStyles } from '@material-ui/core'
@@ -17,11 +18,11 @@ class MessageInputField extends Component {
 
 	handleKeyUp = (event, createMessage, chatroomId) => {
 		event.preventDefault()
-		if (event.keyCode === 13 && !event.shiftKey) {
+		if (!event.shiftKey && event.keyCode === 13) {
 			createMessage({
 				variables: {
 					chatroomId: chatroomId,
-					message: this.state.message
+					message: this.state.message.trim()
 				}
 			})
 			this.setState({ message: '' })
@@ -39,17 +40,19 @@ class MessageInputField extends Component {
 			<Mutation mutation={CREATE_MESSAGE_MUTATION}>
 				{createMessage => (
 					<div className={classes.navRoot}>
-						<input
+						<TextareaAutosize
 							id="message"
 							name="message"
 							type="text"
 							autoComplete="off"
+							minRows="1"
+							maxRows="5"
 							value={this.state.message}
 							onChange={this.handleChange}
 							placeholder="Type a message..."
 							onKeyUp={e => this.handleKeyUp(e, createMessage, chatroomId)}
 							className={classes.inputField}
-							ref={node => (this.input = node)}
+							inputRef={node => (this.input = node)}
 						/>
 						<div className={classes.buttons}>
 							<button
@@ -69,11 +72,13 @@ class MessageInputField extends Component {
 const styles = theme => ({
 	navRoot: {
 		width: '100%',
+		minHeight: 50,
+		// overflow: 'scroll',
+		maxHeight: 'auto',
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		gridRow: '16/17',
 		borderTop: '1px solid #CCCCCC',
 		borderRight: '1px solid #CCCCCC',
 		verticalAlign: 'middle'
@@ -96,7 +101,6 @@ const styles = theme => ({
 		fontSize: 14,
 		padding: 5,
 		marginLeft: 10,
-		height: '100%',
 		'&:focus': {
 			outline: 'none'
 		},

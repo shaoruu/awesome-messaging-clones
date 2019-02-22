@@ -7,13 +7,13 @@ const Message = props => {
 
 	const specials = {}
 
-	let cornerRadiuses = ['5px', '25px', '25px', '5px']
+	let cornerRadiuses = ['5px', '20px', '20px', '5px']
 	if (specialStyles.includes('first')) {
-		cornerRadiuses[3] = '25px'
+		cornerRadiuses[3] = '20px'
 		specials['marginBottom'] = 7
 	}
 	if (specialStyles.includes('last')) {
-		cornerRadiuses[0] = '25px'
+		cornerRadiuses[0] = '20px'
 		specials['marginTop'] = 5
 	}
 
@@ -44,9 +44,14 @@ const Message = props => {
 
 	return (
 		<div className={classes.messageRoot}>
-			<h1 className={classes.messageBody} style={fancyStyles}>
-				{message}
-			</h1>
+			<p className={classes.messageBody} style={fancyStyles}>
+				{message.split('\n').map((ele, index) => (
+					<>
+						{ele}
+						<br />
+					</>
+				))}
+			</p>
 		</div>
 	)
 }
@@ -60,7 +65,7 @@ const styles = theme => ({
 		overflowWrap: 'break-word',
 
 		color: '#eeeeee',
-		padding: '7.5px 12px',
+		padding: '8px 12px',
 		margin: '2px 10px 0 0'
 	}
 })
