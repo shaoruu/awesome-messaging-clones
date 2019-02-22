@@ -4,6 +4,7 @@ import MainPanel from './MainPanel/MainPanel'
 import LeftPanel from './LeftPanel/LeftPanel'
 import { withStyles } from '@material-ui/core'
 import RightPanel from './RightPanel/RightPanel'
+import TopPanel from './TopPanel/TopPanel'
 
 class ChatPage extends Component {
 	render() {
@@ -19,6 +20,10 @@ class ChatPage extends Component {
 		return (
 			<div className={classes.root}>
 				<LeftPanel className={classes.leftPanel} {...commonProps} />
+				<TopPanel
+					chatroomId={this.props.chatroomId}
+					className={classes.topPanel}
+				/>
 				<MainPanel className={classes.mainPanel} {...commonProps} />
 				<RightPanel
 					chatroomId={this.props.chatroomId}
@@ -44,10 +49,20 @@ const styles = theme => ({
 		display: 'grid',
 		gridTemplateRows: 'repeat(16, 1fr)'
 	},
+	topPanel: {
+		gridColumn: '6/21',
+		gridRow: '1/1',
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderBottom: '1px solid #CCCCCC'
+	},
 	leftPanel: {
 		gridColumn: '1/6',
 		gridRow: '1/17',
 		height: '100%',
+		width: '100%',
 		borderRight: '1px solid #CCCCCC',
 		position: 'relative',
 		display: 'grid',

@@ -16,7 +16,8 @@ class LeftPanelNavBar extends Component {
 
 const styles = theme => ({
 	panelNavBarWrapper: {
-		gridRow: '1/2'
+		gridRow: '1/2',
+		borderBottom: '1px solid #CCCCCC'
 	}
 })
 

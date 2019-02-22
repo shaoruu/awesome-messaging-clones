@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 
 import { MESSAGES_QUERY, MESSAGE_SUBSCRIPTIONS } from '../../../../lib/graphql'
-import Message from './Message/Message'
 import { withStyles, CircularProgress } from '@material-ui/core'
+import MessageList from './MessageList/MessageList'
 
 let subscribed = {}
 
@@ -93,39 +93,7 @@ class Messages extends Component {
 
 						const { edges: messages } = data.messages
 
-						return (
-							<ul className={classes.messagesWrapper}>
-								{messages.map((ele, index) => {
-									let specialStyle = []
-									const { username: sender } = ele.node.sender.user
-
-									if (index === 0) specialStyle.push('first')
-									if (
-										index !== 0 &&
-										sender !==
-											messages[index - 1].node.sender.user.username
-									)
-										specialStyle.push('first')
-									if (
-										index !== messages.length - 1 &&
-										sender !==
-											messages[index + 1].node.sender.user.username
-									)
-										specialStyle.push('last')
-									if (index === messages.length - 1)
-										specialStyle.push('last')
-
-									return (
-										<Message
-											key={index}
-											data={ele.node}
-											username={username}
-											specialStyle={specialStyle}
-										/>
-									)
-								})}
-							</ul>
-						)
+						return <MessageList data={messages} username={username} />
 					}}
 				</Query>
 			</div>
@@ -137,21 +105,17 @@ const styles = theme => ({
 	root: {
 		gridRow: '1/16',
 		borderRight: '1px solid #CCCCCC',
-		borderTop: '1px solid #CCCCCC'
-	},
-	messagesWrapper: {
-		listStyle: 'none',
 		display: 'flex',
 		flexDirection: 'column-reverse',
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
-		height: '100%',
-		overflowY: 'scroll',
-		paddingBottom: 10
+		width: '100%',
+		overflowY: 'auto',
+		paddingBottom: 5
 	},
 	progressBarWrapper: {
 		gridRow: '1/16',
-		padding: 'auto',
+		height: '100%',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center'

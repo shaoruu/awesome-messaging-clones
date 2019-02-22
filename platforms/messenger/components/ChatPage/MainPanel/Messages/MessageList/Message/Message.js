@@ -1,31 +1,20 @@
-import { withStyles } from '@material-ui/core'
+import { withStyles, Avatar } from '@material-ui/core'
 
 const Message = props => {
-	const { classes, username: meUsername, specialStyle, chatroomId } = props
+	const { classes, isMe, specialStyles } = props
 
-	const {
-		message,
-		sender: {
-			nickname,
-			user: { username }
-		},
-		sentAt
-	} = props.data
-
-	const senderName = nickname ? nickname : username
-
-	const isMe = meUsername === username
+	const { message, sentAt } = props.data
 
 	const specials = {}
 
 	let cornerRadiuses = ['5px', '25px', '25px', '5px']
-	if (specialStyle.includes('first')) {
+	if (specialStyles.includes('first')) {
 		cornerRadiuses[3] = '25px'
-		specials['marginBottom'] = 10
+		specials['marginBottom'] = 7
 	}
-	if (specialStyle.includes('last')) {
+	if (specialStyles.includes('last')) {
 		cornerRadiuses[0] = '25px'
-		specials['marginTop'] = 10
+		specials['marginTop'] = 5
 	}
 
 	if (isMe) {
@@ -47,37 +36,31 @@ const Message = props => {
 				background: '#EFEEEE',
 				color: 'black',
 				marginRight: 0,
-				marginLeft: 10
+				marginLeft: 5
 			},
 			specials
 		)
 	}
 
 	return (
-		<li
-			className={classes.messageRoot}
-			style={isMe ? { alignSelf: 'flex-end' } : null}>
+		<div className={classes.messageRoot}>
 			<h1 className={classes.messageBody} style={fancyStyles}>
-				{isMe ? `${message}` : `${senderName}: ${message}`}
+				{message}
 			</h1>
-		</li>
+		</div>
 	)
 }
 
 const styles = theme => ({
-	messageRoot: { display: 'inline-block' },
+	messageRoot: { display: 'inline-block', height: '100%', maxWidth: 400 },
 	messageBody: {
 		background: '#0084ff',
-		display: 'inline-block',
 		fontSize: 14,
 		fontWeight: 400,
-		maxWidth: 400,
 		overflowWrap: 'break-word',
-		wordWrap: 'breakWord',
-		hyphens: 'auto',
 
 		color: '#eeeeee',
-		padding: '8px 12px',
+		padding: '7.5px 12px',
 		margin: '2px 10px 0 0'
 	}
 })

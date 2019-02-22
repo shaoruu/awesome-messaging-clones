@@ -39,7 +39,7 @@ const Chatroom = props => {
 
 		const senderName = nickname || (username === meUsername ? 'You' : username)
 
-		body = <h3 className={classes.latestMessage}>{`${senderName}: ${message}`}</h3>
+		body = <h1 className={classes.latestMessage}>{`${senderName}: ${message}`}</h1>
 	}
 
 	if (sentTime) {
@@ -54,13 +54,7 @@ const Chatroom = props => {
 			style={isThisChatroom ? { background: 'rgba(0, 0, 0, 0.05)' } : null}>
 			<Link as={`/chat/${uniqueIdentifier}`} href={`/chat?id=${uniqueIdentifier}`}>
 				<a>
-					{profilePic && (
-						<Avatar
-							alt="profile"
-							src={profilePic}
-							className={classes.avatar}
-						/>
-					)}
+					<Avatar alt="profile" src={profilePic} className={classes.avatar} />
 					<div className={classes.infoWrapper}>
 						<div className={classes.nameWrapper}>
 							<h1 className={classes.chatroomName}>{chatroomName}</h1>
@@ -82,6 +76,7 @@ const styles = theme => ({
 	chatroomWrapper: {
 		padding: 5,
 		cursor: 'pointer',
+		justifySelf: 'stretch',
 		'&:hover': {
 			background: 'rgba(0, 0, 0, 0.05)'
 		},
@@ -97,12 +92,14 @@ const styles = theme => ({
 		}
 	},
 	infoWrapper: {
+		flex: 1,
+		minWidth: 0,
 		marginLeft: 10,
-		width: '100%',
 		verticalAlign: 'middle'
 	},
 	chatroomName: {
 		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap',
 		overflow: 'hidden',
 		fontSize: 16,
 		fontWeight: 400,
@@ -111,6 +108,7 @@ const styles = theme => ({
 	latestMessage: {
 		textOverflow: 'ellipsis',
 		overflow: 'hidden',
+		whiteSpace: 'nowrap',
 		fontSize: 14,
 		fontWeight: 400,
 		color: 'rgba(0, 0, 0, 0.4)',
@@ -118,12 +116,11 @@ const styles = theme => ({
 	},
 	avatar: {
 		margin: 3,
-		width: 60,
-		height: 60,
+		width: 50,
+		height: 50,
 		border: '1px solid #F5F6F7'
 	},
 	nameWrapper: {
-		width: '100%',
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',

@@ -114,9 +114,7 @@ class Chatrooms extends Component {
 const styles = themes => ({
 	chatroomsList: {
 		height: '100%',
-		width: '100%',
 		gridRow: '2/17',
-		borderTop: '1px solid #CCCCCC',
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'flex-start',
