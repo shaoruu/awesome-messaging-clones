@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
-import TextareaAutosize from 'react-textarea-autosize'
 
 import { CREATE_MESSAGE_MUTATION } from '../../../../lib/graphql'
 import { withStyles } from '@material-ui/core'
@@ -18,7 +17,7 @@ class MessageInputField extends Component {
 
 	handleKeyUp = (event, createMessage, chatroomId) => {
 		event.preventDefault()
-		if (!event.shiftKey && event.keyCode === 13) {
+		if (!event.shiftKey && event.keyCode === 13 && event.target.value !== '') {
 			createMessage({
 				variables: {
 					chatroomId: chatroomId,
@@ -29,10 +28,6 @@ class MessageInputField extends Component {
 		}
 	}
 
-	componentDidUpdate() {
-		this.input.focus()
-	}
-
 	render() {
 		const { classes, chatroomId } = this.props
 
@@ -40,7 +35,7 @@ class MessageInputField extends Component {
 			<Mutation mutation={CREATE_MESSAGE_MUTATION}>
 				{createMessage => (
 					<div className={classes.navRoot}>
-						<TextareaAutosize
+						<input
 							id="message"
 							name="message"
 							type="text"
@@ -52,7 +47,7 @@ class MessageInputField extends Component {
 							placeholder="Type a message..."
 							onKeyUp={e => this.handleKeyUp(e, createMessage, chatroomId)}
 							className={classes.inputField}
-							inputRef={node => (this.input = node)}
+							ref={this.props.inputRef}
 						/>
 						<div className={classes.buttons}>
 							<button

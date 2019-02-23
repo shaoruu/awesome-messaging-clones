@@ -64,7 +64,7 @@ class Messages extends Component {
 		const { classes, username } = this.props
 
 		return (
-			<div className={classes.root}>
+			<div className={classes.root} onClick={this.props.clicked}>
 				<Query
 					query={MESSAGES_QUERY}
 					variables={{
@@ -109,6 +109,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
 		width: '100%',
+		height: '100%',
 		overflowY: 'auto',
 		paddingBottom: 5
 	},

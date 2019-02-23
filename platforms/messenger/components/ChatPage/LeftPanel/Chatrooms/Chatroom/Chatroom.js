@@ -129,8 +129,9 @@ const styles = theme => ({
 	},
 	lastMessageTimestamp: {
 		fontSize: 13,
-		fontWeight: 200,
-		marginRight: 5
+		fontWeight: 400,
+		marginRight: 5,
+		color: 'rgba(0, 0, 0, 0.35)'
 	}
 })
 
