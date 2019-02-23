@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
+import { withStyles, CircularProgress } from '@material-ui/core'
 
 import { MESSAGES_QUERY, MESSAGE_SUBSCRIPTIONS } from '../../../../lib/graphql'
-import { withStyles, CircularProgress } from '@material-ui/core'
 import MessageList from './MessageList/MessageList'
 
 let subscribed = {}

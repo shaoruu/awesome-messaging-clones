@@ -17,6 +17,7 @@ import {
 } from '../../../../lib/graphql/mutations'
 import MemberList from './MemberList/MemberList'
 import { redirect } from '../../../../lib/utils'
+import ChatroomBasicInfo from '../ChatroomBasicInfo/ChatroomBasicInfo'
 
 let subscribed = {}
 
@@ -121,7 +122,10 @@ export default class ChatroomToolbox extends Component {
 
 					return (
 						<div>
-							<h3>{chatroomName}</h3>
+							<ChatroomBasicInfo
+								chatroomName={chatroomName}
+								chatroomId={chatroomId}
+							/>
 							<Mutation mutation={UPDATE_CHATROOM_MUTATION}>
 								{updateChatroom => {
 									return (
