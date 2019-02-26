@@ -35,15 +35,13 @@ const Chatroom = props => {
 
 		profilePic = image
 
-		sentTime = sentAt
+		sentTime = moment(sentAt).format('LT')
+
+		console.log(sentTime)
 
 		const senderName = nickname || (username === meUsername ? 'You' : username)
 
 		body = <h1 className={classes.latestMessage}>{`${senderName}: ${message}`}</h1>
-	}
-
-	if (sentTime) {
-		sentTime = moment(sentTime).format('LT')
 	}
 
 	const isThisChatroom = uniqueIdentifier === chatroomId
