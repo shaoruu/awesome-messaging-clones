@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+    redis:
+        container_name: redis
+        image: redis:latest
+        ports:
+            - 6379:6379
+        networks:
+            - redis_net
+        restart: always
+
+    backend:
+        container_name: backend
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        volumes: 
+            - ./server:/app/backend
+        ports:
+            - 8000:8000
+        expose:
+            - 8000
+        networks:
+            - web_connection
+            - redis_net
+        depends_on:
+            - redis
+        restart: 'always'
+        
+    messenger:
+        container_name: messenger
+        restart: always
+        build:
+            context: ./client/platforms/messenger
+            dockerfile: Dockerfile
+        volumes:
+            - ./client/platforms/messenger:/app/frontend
+            - /app/frontend/node_modules/
+        networks:
+            - web_connection
+        depends_on:
+            - backend
+        ports:
+            - 80:3000
+            
+networks:
+    redis_net:
+        driver: "bridge"
+    web_connection:
+        driver: "bridge"
