@@ -29,7 +29,7 @@ namedlist==1.7
 pillow==5.4.1
 promise==2.2.1
 pyhamcrest==1.9.0
-pyjwt==1.7.1
+pyjwt==2.4.0
 pytz==2018.9
 rx==1.6.1
 singledispatch==3.4.0.3
